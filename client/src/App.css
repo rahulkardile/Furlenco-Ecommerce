@@ -1,0 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Advent+Pro:ital,wght@0,100..900;1,100..900&family=Kaushan+Script&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#KaushanFont {
+  font-family: "Advent Pro", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-variation-settings: 100;
+}
