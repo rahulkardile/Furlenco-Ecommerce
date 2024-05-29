@@ -8,10 +8,10 @@ import Header from "./components/Header";
 import Login from "./pages/Login";
 import Cart from "./pages/Cart";
 import Loader from "./pages/Loader";
-import Private from "./utils/Private";
+import { AdminAccess } from "./utils/Private";
 
 const NotFound = lazy(() => import("./pages/NotFound"));
-// const Private = lazy(() => import("./utils/Private"));
+const Private = lazy(() => import("./utils/Private"));
 const Register = lazy(() => import("./pages/Register"));
 
 function App() {
@@ -27,8 +27,11 @@ function App() {
 
           <Route element={<Private />}>
             <Route path="/cart" element={<Cart />} />
-          </Route>
 
+            <Route element={<AdminAccess />}>
+              <Route path="/create" element={<div>create</div>} />
+            </Route>
+          </Route>
         </Routes>
       </Suspense>
       <Toaster position="top-center" />

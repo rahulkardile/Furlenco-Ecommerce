@@ -5,7 +5,7 @@ import CartItems from "../components/CartItems";
 
 const Cart = () => {
   return (
-    <section className="w-screen flex flex-row m-auto  justify-center mt-12 gap-12 mb-7">
+    <section className="w-screen flex flex-row m-auto  justify-center mt-12 gap-12 mb-7 px-28">
       <div className="w-[55%] rounded-xl border border-gray-300">
         <h1 className="w-full bg-cyan-100 font-semibold p-6 pl-7 rounded-t-lg">Buy Cart</h1>
 
@@ -28,7 +28,7 @@ const Cart = () => {
         </section>
       </div>
 
-      <div className="bg-white shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] h-[25%] mt-2 p-4 w-[30%] rounded-md">
+      <div className="bg-white shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] h-[30%] mt-2 p-4 w-[38%] rounded-md">
 
         <section className="flex flex-row justify-between">
           <div className="flex flex-row justify-between gap-4">

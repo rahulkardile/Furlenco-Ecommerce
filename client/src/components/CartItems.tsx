@@ -6,7 +6,8 @@ import { HiMiniMinus } from "react-icons/hi2";
 
 const CartItems = () => {
   return (
-    <section className="flex flex-row gap-4 p-3 border border-t-0 relative">
+    <section className="flex flex-row gap-4 p-3 relative">
+      <p className="border-t-0 border-gray-300 border-[0.01px] top-0 absolute w-[90%] left-8 " />
       <img
         className="w-36 h-auto object-contain"
         src="https://assets.furlenco.com/image/upload/dpr_1.0,f_auto,q_auto/v1/r2/products/194/plp_1.png"

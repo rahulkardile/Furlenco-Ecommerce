@@ -50,11 +50,11 @@ const Header = () => {
           className="text-gray-800 hover:cursor-pointer hover:text-cyan-600 hover:-translate-y-1 duration-500"
         />
         <Link to={"/cart"}>
-        <FaCartArrowDown
-          onMouseEnter={() => setHidden(false)}
-          className="text-gray-800 hover:cursor-pointer hover:text-cyan-600 hover:-translate-y-1 duration-500"
+          <FaCartArrowDown
+            onMouseEnter={() => setHidden(false)}
+            className="text-gray-800 hover:cursor-pointer hover:text-cyan-600 hover:-translate-y-1 duration-500"
           />
-          </Link>
+        </Link>
       </nav>
 
       <dialog
@@ -65,10 +65,21 @@ const Header = () => {
         <section className="flex flex-col select-none gap-2 items-center w-full">
           {user?._id ? (
             <>
-              <h3 className="text-base">Hello {user.name}</h3>
               <Link to={"/profile"} className="hover:underline">
                 Profile
               </Link>
+              {user.role === "admin" ? (
+                <Link to={"/create"} className="hover:underline">
+                  Create
+                </Link>
+              ) : (
+                ""
+              )}
+
+              <Link to={"/contact"} className="hover:underline">
+                Contact us
+              </Link>
+
               <button
                 onClick={handleLogout}
                 className="duration-200 text-base hover:text-red-600"
@@ -77,14 +88,15 @@ const Header = () => {
               </button>
             </>
           ) : (
-            <Link to={"/login"} className="hover:underline">
-              Login
-            </Link>
+            <>
+              <Link to={"/login"} className="hover:underline">
+                Login
+              </Link>
+              <Link to={"/contact"} className="hover:underline">
+                Contact us
+              </Link>
+            </>
           )}
-
-          <Link to={"/contact"} className="hover:underline">
-            Contact us
-          </Link>
         </section>
       </dialog>
     </header>
