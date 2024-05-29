@@ -1,10 +1,39 @@
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { FormData } from "../typeScript/FromData";
 
 const Create = () => {
+  const [formData, setFormData] = useState<FormData>({
+    title: "",
+    category: "",
+    description: "",
+    price: 0,
+    discount: 0,
+  });
+  
   const [loading, setLoading] = useState();
-
+  const [image, setImage] = useState();
+  
   const handleFile = () => {};
-  const handleSubmit = () => {};
+
+  const handleFormData = (
+    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const { id, value } = e.target;
+    if (formData !== undefined) {
+      setFormData({
+        ...formData,
+        [id]: value
+      });
+    }
+  };
+
+  console.log(formData);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+
+    console.log(formData);
+  };
 
   return (
     <section className="flex justify-evenly flex-col gap-4 m-auto items-center mt-6 mb-24">
@@ -20,7 +49,7 @@ const Create = () => {
             <input
               type="text"
               id="title"
-              //   onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => handleFormData(e)}
               className="p-2 w-[100%] border outline-cyan-400 rounded"
               placeholder="Name"
               required
@@ -33,7 +62,7 @@ const Create = () => {
               id="price"
               min={1999}
               defaultValue={1999}
-              //   onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => handleFormData(e)}
               className="p-2 w-[100%] border outline-cyan-400 rounded"
               placeholder="price"
               required
@@ -46,7 +75,7 @@ const Create = () => {
               id="discount"
               min={300}
               defaultValue={299}
-              //   onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => handleFormData(e)}
               className="p-2 w-[100%] outline-cyan-400 border rounded"
               placeholder="discount"
               required
@@ -57,24 +86,23 @@ const Create = () => {
             <span className="text-xs font-medium">Image</span>
             <input
               type="file"
-              id="img"
+              id="mainImage"
               accept="image/*"
               className="p-2 w-[100%] outline-cyan-400 border rounded bg-white"
-              onChange={handleFile}
+              onChange={(e) => handleFormData(e)}
               required
             />
           </div>
         </div>
 
         <div className="flex flex-col w-[95%] mt-1 sm:w-[50%]">
-
           <div className="flex flex-col w-[95%] gap-1 mb-2">
             <span className="text-xs font-medium">Description</span>
             <textarea
               id="description"
               className="p-5 w-[100%] h-32 outline-cyan-400 border rounded"
               placeholder="Description"
-              //   onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => handleFormData(e)}
               required
             />
           </div>
@@ -83,10 +111,10 @@ const Create = () => {
             <span className="text-xs font-medium">Tags</span>
             <input
               type="text"
-              id="tags"
+              id="category"
               className="p-2 w-[100%] outline-cyan-400 border rounded"
               placeholder="Add Tags"
-              //   onChange={(e) => setTags(e.target.value)}
+              onChange={(e) => handleFormData(e)}
               required
             />
           </div>
@@ -99,7 +127,6 @@ const Create = () => {
             Upload
           </button>
         </div>
-
       </form>
     </section>
   );
