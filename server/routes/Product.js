@@ -1,10 +1,11 @@
 import express from "express"
 import Product from "../models/Product.js";
 import verifyUser from "../utils/VerifyUser.js";
+import { upload } from "../utils/Multer.js";
 
 const router = express.Router();
 
-router.post("/create", verifyUser, async (req, res, next) => {
+router.post("/create", verifyUser, upload.single("cover"), async (req, res, next) => {
     try {
         const { _id, name, role } = req.user;
 
@@ -12,6 +13,9 @@ router.post("/create", verifyUser, async (req, res, next) => {
             message: "UnAuthorized User!",
             status: false
         })
+
+        const cover = req.file.originalname;
+        console.log(cover);
 
         const { name: ProductName, price, description, discount, mainImage, category } = req.body;
 
@@ -24,19 +28,19 @@ router.post("/create", verifyUser, async (req, res, next) => {
             message: "Something is missing!",
         })
 
-        const Product = await Product.create({
-            name: ProductName,
-            owner: {
-                id: _id,
-                email,
-                name
-            },
-            price,
-            description,
-            discount,
-            mainImage,
-            category
-        })
+        /*    const Product = await Product.create({
+                name: ProductName,
+                owner: {
+                    id: _id,
+                    email,
+                    name
+                },
+                price,
+                description,
+                discount,
+                mainImage,
+                category
+             })  */
 
         res.status(201).json({
             success: true,
