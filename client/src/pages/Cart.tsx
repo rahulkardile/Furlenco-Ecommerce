@@ -1,14 +1,13 @@
 import { BiSolidOffer } from "react-icons/bi";
 import { FaCircleArrowRight } from "react-icons/fa6";
 import { FaArrowRight } from "react-icons/fa";
-import { TiTick } from "react-icons/ti";
 import CartItems from "../components/CartItems";
 
 const Cart = () => {
   return (
     <section className="w-screen flex flex-row m-auto  justify-center mt-12 gap-12 mb-7">
       <div className="w-[55%] rounded-xl border border-gray-300">
-        <h1 className="w-full bg-cyan-100 p-4 rounded-t-lg">Buy Items</h1>
+        <h1 className="w-full bg-cyan-100 font-semibold p-6 pl-7 rounded-t-lg">Buy Cart</h1>
 
         <CartItems />
         <CartItems />
