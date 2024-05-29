@@ -14,7 +14,7 @@ router.post("/create", verifyUser, upload.single("cover"), async (req, res, next
             status: false
         })
 
-        const cover = req.file.originalname;
+        const cover = req.file;
         console.log(cover);
 
         const { name: ProductName, price, description, discount, category } = req.body;
@@ -24,7 +24,7 @@ router.post("/create", verifyUser, upload.single("cover"), async (req, res, next
             message: "Something is missing!",
         })
 
-        /*    const Product = await Product.create({
+          const Product = await Product.create({
                 name: ProductName,
                 owner: {
                     id: _id,
@@ -36,7 +36,7 @@ router.post("/create", verifyUser, upload.single("cover"), async (req, res, next
                 discount,
                 mainImage,
                 category
-             })  */
+             })  
 
         res.status(201).json({
             success: true,
