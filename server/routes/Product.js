@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post("/create", verifyUser, upload.single("cover"), async (req, res, next) => {
     try {
-        const { _id, name, role } = req.user;
+        const { _id, name, role, email } = req.user;
 
         if (role == "user") return res.status(401).json({
             message: "UnAuthorized User!",
@@ -15,16 +15,16 @@ router.post("/create", verifyUser, upload.single("cover"), async (req, res, next
         })
 
         const cover = req.file;
-        console.log("image is : ", cover);
+        console.log(req.body);
 
-        const { name: ProductName, price, description, discount, category } = req.body;
+        const { name: ProductName, price, description, stock, discount, category } = req.body;
 
         if (!ProductName || !price || !description || !discount || !category) return res.status(404).json({
             success: false,
             message: "Something is missing!",
         })
 
-        const Product = await Product.create({
+        const product = await Product.create({
             name: ProductName,
             owner: {
                 id: _id,
@@ -32,18 +32,17 @@ router.post("/create", verifyUser, upload.single("cover"), async (req, res, next
                 name
             },
             price,
+            stock,
             description,
             discount,
             mainImage: cover.path,
             category
         })
 
-        console.log(req.body)
-
         res.status(201).json({
             success: true,
-            message: `${name} has been created!`,
-            data: "okk"
+            message: `${product.name} has been created!`,
+            data: product._id
         })
 
     } catch (error) {
