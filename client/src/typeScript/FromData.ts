@@ -1,4 +1,4 @@
-export type FormData = {
+export type FormDataSet = {
   title: string;
   description: string;
   category: string;

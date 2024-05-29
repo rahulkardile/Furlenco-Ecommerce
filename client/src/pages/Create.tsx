@@ -1,19 +1,22 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { FormData } from "../typeScript/FromData";
+import { FormDataSet } from "../typeScript/FromData";
 
 const Create = () => {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<FormDataSet>({
     title: "",
     category: "",
     description: "",
     price: 0,
     discount: 0,
   });
-  
-  const [loading, setLoading] = useState();
-  const [image, setImage] = useState();
-  
-  const handleFile = () => {};
+
+  const [img, setImg] = useState<File>();
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    setImg(file);
+  };
 
   const handleFormData = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
@@ -22,17 +25,36 @@ const Create = () => {
     if (formData !== undefined) {
       setFormData({
         ...formData,
-        [id]: value
+        [id]: value,
       });
     }
   };
 
-  console.log(formData);
+  console.log(img);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
-    console.log(formData);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const form: any = new FormData();
+
+    form.set("name", formData.title);
+    form.set("description", formData.description);
+    form.set("category", formData.category);
+    form.set("price", formData.price);
+    form.set("discount", formData.discount);
+    form.set("cover", img);
+
+    const res = await fetch("/api/product/create", {
+      method: "POST",
+      body: form,
+    });
+
+    const data = await res.json();
+    console.log(data);
+
+    setLoading(false);
   };
 
   return (
@@ -89,7 +111,7 @@ const Create = () => {
               id="mainImage"
               accept="image/*"
               className="p-2 w-[100%] outline-cyan-400 border rounded bg-white"
-              onChange={(e) => handleFormData(e)}
+              onChange={(e) => handleFile(e)}
               required
             />
           </div>
