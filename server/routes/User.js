@@ -56,6 +56,9 @@ router.post("/get", async (req, res, next) => {
             next(ErrorHandler(404, "Please Provide Valid Credencials!"))
         }
 
+        const passOk = bcrypt.compareSync(password, GetUser.password);
+        if (!passOk) return next(ErrorHandler(400, "Wrong password!"));
+
         const { password: pass, createdAt, updatedAt, __v, ...rest } = GetUser._doc
 
         const access_user = jwt.sign({ _id: rest._id, name: rest.name, email: rest.email, role: rest.role }, process.env.JWT_SECRET);
