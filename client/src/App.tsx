@@ -7,9 +7,9 @@ import Home from "./pages/Home";
 import Header from "./components/Header";
 import Login from "./pages/Login";
 import Cart from "./pages/Cart";
+import Loader from "./pages/Loader";
 
 const NotFound = lazy(() => import("./pages/NotFound"));
-const Loader = lazy(() => import("./pages/Loader"));
 const Register = lazy(() => import("./pages/Register"));
 
 function App() {
