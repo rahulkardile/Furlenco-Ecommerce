@@ -8,40 +8,42 @@ const router = express.Router();
 router.post("/create", verifyUser, upload.single("cover"), async (req, res, next) => {
     try {
         const { _id, name, role } = req.user;
-        
+
         if (role == "user") return res.status(401).json({
             message: "UnAuthorized User!",
             status: false
         })
 
         const cover = req.file;
-        console.log(cover);
+        console.log("image is : ", cover);
 
         const { name: ProductName, price, description, discount, category } = req.body;
 
-        if (!ProductName || !price || !description || !discount || !mainImage || !category) return res.status(404).json({
+        if (!ProductName || !price || !description || !discount || !category) return res.status(404).json({
             success: false,
             message: "Something is missing!",
         })
 
-          const Product = await Product.create({
-                name: ProductName,
-                owner: {
-                    id: _id,
-                    email,
-                    name
-                },
-                price,
-                description,
-                discount,
-                mainImage,
-                category
-             })  
+        const Product = await Product.create({
+            name: ProductName,
+            owner: {
+                id: _id,
+                email,
+                name
+            },
+            price,
+            description,
+            discount,
+            mainImage: cover.path,
+            category
+        })
+
+        console.log(req.body)
 
         res.status(201).json({
             success: true,
-            message: `${createBlog.title} has been created!`,
-            data: createBlog._id
+            message: `${name} has been created!`,
+            data: "okk"
         })
 
     } catch (error) {
