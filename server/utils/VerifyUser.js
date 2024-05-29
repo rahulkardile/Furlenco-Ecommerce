@@ -4,7 +4,7 @@ import ErrorHandler from "./ErrorHandler.js";
 const verifyUser = (req, res, next) => {
 
     const token = req.cookies.access_furlenco;
-    if (!token) return next(ErrorHandler(404, "Bad Request Cookie Not Found!"))
+    if (!token) return next(ErrorHandler(401, "UNAUTHORIZED!"));
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) return next(ErrorHandler(403, "Bad Cookies!"));

@@ -8,7 +8,7 @@ const router = express.Router();
 router.post("/create", verifyUser, upload.single("cover"), async (req, res, next) => {
     try {
         const { _id, name, role } = req.user;
-
+        
         if (role == "user") return res.status(401).json({
             message: "UnAuthorized User!",
             status: false
@@ -17,11 +17,7 @@ router.post("/create", verifyUser, upload.single("cover"), async (req, res, next
         const cover = req.file.originalname;
         console.log(cover);
 
-        const { name: ProductName, price, description, discount, mainImage, category } = req.body;
-
-        if (!mainImage) {
-            console.log("IMG is missing!");
-        }
+        const { name: ProductName, price, description, discount, category } = req.body;
 
         if (!ProductName || !price || !description || !discount || !mainImage || !category) return res.status(404).json({
             success: false,

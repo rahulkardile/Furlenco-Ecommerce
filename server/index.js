@@ -4,7 +4,7 @@ import dotenv from "dotenv"
 import cookieParser from "cookie-parser"
 
 import User from "./routes/User.js"
-import Product from "./models/Product.js"
+import Product from "./routes/Product.js"
 
 const app = express();
 app.use(express.json());
