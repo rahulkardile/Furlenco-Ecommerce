@@ -8,7 +8,7 @@ const Create = () => {
 
   return (
     <section className="flex justify-evenly flex-col gap-4 m-auto items-center mt-6 mb-24">
-      <h1 className="text-2xl font-semibold">List Your Audio Book</h1>
+      <h1 className="text-2xl font-semibold">List Your Product</h1>
 
       <form
         onSubmit={handleSubmit}
@@ -54,10 +54,25 @@ const Create = () => {
           </div>
 
           <div className="flex flex-col w-[95%] gap-1 mb-2">
+            <span className="text-xs font-medium">Image</span>
+            <input
+              type="file"
+              id="img"
+              accept="image/*"
+              className="p-2 w-[100%] outline-cyan-400 border rounded bg-white"
+              onChange={handleFile}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col w-[95%] mt-1 sm:w-[50%]">
+
+          <div className="flex flex-col w-[95%] gap-1 mb-2">
             <span className="text-xs font-medium">Description</span>
             <textarea
               id="description"
-              className="p-5 w-[100%] outline-cyan-400 border rounded"
+              className="p-5 w-[100%] h-32 outline-cyan-400 border rounded"
               placeholder="Description"
               //   onChange={(e) => setDescription(e.target.value)}
               required
@@ -76,37 +91,6 @@ const Create = () => {
             />
           </div>
 
-          <div className="flex flex-col w-[95%] gap-1 mb-2">
-            <span className="text-xs font-medium">Image</span>
-            <input
-              type="file"
-              id="img"
-              accept="image/*"
-              className="p-2 w-[100%] outline-cyan-400 border rounded bg-white"
-              onChange={handleFile}
-              required
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-col mt-5 w-[95%] sm:w-[50%]">
-          <div className="flex flex-row items-center gap-2 mb-2">
-            <h1 className="text-base font-semibold">Audio Epicodes:</h1>
-            <span className="text-sm">Add episode one after another </span>
-          </div>
-
-          <div className="mb-3">
-            <input
-              type="file"
-              id="epi"
-              accept="audio/*"
-              required
-              multiple
-              className="p-2 w-[100%] border rounded outline-cyan-400 bg-white"
-              onChange={handleFile}
-            />
-          </div>
-
           <button
             type="submit"
             disabled={loading}
@@ -115,6 +99,7 @@ const Create = () => {
             Upload
           </button>
         </div>
+
       </form>
     </section>
   );
