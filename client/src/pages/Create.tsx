@@ -1,16 +1,21 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { FormDataSet } from "../typeScript/FromData";
+import { FormDataSet, ProductRes } from "../typeScript/FromData";
+import toast from "react-hot-toast";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Create = () => {
   const [formData, setFormData] = useState<FormDataSet>({
     title: "",
     category: "",
     description: "",
-    price: 0,
-    discount: 0,
+    stock: 10,
+    price: 2000,
+    discount: 300,
   });
+  console.log(formData);
 
   const [img, setImg] = useState<File>();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
@@ -43,6 +48,7 @@ const Create = () => {
     form.set("description", formData.description);
     form.set("category", formData.category);
     form.set("price", formData.price);
+    form.set("stock", formData.stock);
     form.set("discount", formData.discount);
     form.set("cover", img);
 
@@ -51,10 +57,25 @@ const Create = () => {
       body: form,
     });
 
-    const data = await res.json();
-    console.log(data);
+    const { success, message }: ProductRes = await res.json();
 
-    setLoading(false);
+    if (success) {
+      setLoading(false);
+      toast.success(message);
+      setFormData({
+        title: "",
+        category: "",
+        description: "",
+        price: 2000,
+        stock: 10,
+        discount: 300,
+      });
+      setImg(undefined);
+      navigate("/");
+    } else {
+      toast.error(message);
+      setLoading(false);
+    }
   };
 
   return (
@@ -70,6 +91,7 @@ const Create = () => {
             <span className="text-xs font-medium">Name</span>
             <input
               type="text"
+              value={formData.title}
               id="title"
               onChange={(e) => handleFormData(e)}
               className="p-2 w-[100%] border outline-cyan-400 rounded"
@@ -82,6 +104,7 @@ const Create = () => {
             <input
               type="number"
               id="price"
+              value={formData.price}
               min={1999}
               defaultValue={1999}
               onChange={(e) => handleFormData(e)}
@@ -90,16 +113,33 @@ const Create = () => {
               required
             />
           </div>
+
           <div className="flex flex-col w-[95%] gap-1 mb-2">
             <span className="text-xs font-medium">Discount</span>
             <input
               type="number"
               id="discount"
               min={300}
+              value={formData.discount}
               defaultValue={299}
               onChange={(e) => handleFormData(e)}
               className="p-2 w-[100%] outline-cyan-400 border rounded"
               placeholder="discount"
+              required
+            />
+          </div>
+
+          <div className="flex flex-col w-[95%] gap-1 mb-2">
+            <span className="text-xs font-medium">Stock</span>
+            <input
+              type="number"
+              id="stock"
+              min={10}
+              value={formData.stock}
+              defaultValue={10}
+              onChange={(e) => handleFormData(e)}
+              className="p-2 w-[100%] border outline-cyan-400 rounded"
+              placeholder="price"
               required
             />
           </div>
@@ -124,6 +164,7 @@ const Create = () => {
               id="description"
               className="p-5 w-[100%] h-32 outline-cyan-400 border rounded"
               placeholder="Description"
+              value={formData.description}
               onChange={(e) => handleFormData(e)}
               required
             />
@@ -133,6 +174,7 @@ const Create = () => {
             <span className="text-xs font-medium">Tags</span>
             <input
               type="text"
+              value={formData.category}
               id="category"
               className="p-2 w-[100%] outline-cyan-400 border rounded"
               placeholder="Add Tags"
