@@ -31,14 +31,14 @@ const Header = () => {
   return (
     <header
       onMouseLeave={() => setHidden(false)}
-      className="flex p-3 sm:p-6 sticky top-0 z-50 w-screen items-center justify-between px-5 sm:px-12 bg-white drop-shadow-xl"
+      className="flex p-2 sm:p-6 sticky top-0 z-50 w-screen items-center justify-between px-5 sm:px-12 bg-white drop-shadow-xl"
     >
       <img
         onClick={() => navigate("/")}
         onMouseEnter={() => setHidden(false)}
         src={logo}
         alt="Logo"
-        className="w-16 md:w-[150px] h-auto object-contain cursor-pointer"
+        className="w-16 md:w-[200px] h-auto object-contain cursor-pointer"
       />
 
       <Search />

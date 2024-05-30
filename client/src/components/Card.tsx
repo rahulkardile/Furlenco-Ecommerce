@@ -31,10 +31,10 @@ const Card = (data: ProductFetch) => {
         />{" "}
       </button>
       <div className="text-center flex flex-col gap-4">
-        <h2 id="recline" className="px-3 ">
+        <h2 id="recline" className="px-3 line-clamp-2">
           {data.name}
         </h2>
-        <span className="absolute bottom-14 text-slate-800 font-semibold text-xs portrait:bg-blue-300 bg-slate-300 pl-3 rounded-r-full pr-6 py-1">
+        <span className="absolute bottom-14  text-slate-800 font-semibold text-xs portrait:bg-blue-300 bg-slate-300 pl-3 rounded-r-full pr-6 py-1">
           Buy Brand New
         </span>
         <div id="recline" className="bg-yellow-300 p-5 flex flex-row gap-2 justify-center items-center">

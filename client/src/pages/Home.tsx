@@ -28,7 +28,7 @@ const Home = () => {
         <Crousel />
       </section>
       <section className="w-screen px-11 p-10">
-        <h1 id="KaushanFont" className="capitalize text-3xl">
+        <h1 id="recline" className="capitalize text-3xl">
           Latest Products
         </h1>
 

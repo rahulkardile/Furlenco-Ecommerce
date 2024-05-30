@@ -14,10 +14,11 @@ export type AllProduct = {
 };
 
 export type ProductFetch = {
-        _id: string;
-        name: string;
-        mainImage: string;
-        discount: number;
-        price: number;
-        stock: number;
+  quantity?: number;
+  _id: string;
+  name: string;
+  mainImage: string;
+  discount: number;
+  price: number;
+  stock: number;
 };

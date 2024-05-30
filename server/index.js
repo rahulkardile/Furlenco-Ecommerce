@@ -24,11 +24,11 @@ try {
 app.get("/", (req, res) => {
     res.status(200).json({
         statusCode: 200,
-        message: "Server is Working!"
+        message: "Server is Working!" 
     })
 })
 
-app.use("/api/uploads", express.static("uploads"))
+app.use("/api/uploads", express.static("uploads"));
 
 app.use("/api/user", User)
 app.use("/api/product", Product)
