@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import toast from "react-hot-toast";
 
 interface cart {
   _id: string;
@@ -32,10 +33,24 @@ const ProductCart = createSlice({
   initialState,
   reducers: {
     addProduct: (state, action: PayloadAction<cart>) => {
-      state.cardItems.push(action.payload);
+      state.loading = true;
+      const index = state.cardItems.findIndex(
+        (i) => i._id === action.payload._id
+      );
+
+      if (index !== -1) {
+        state.cardItems.push(action.payload);
+        state.loading = false;
+        toast.success("Item added!");
+      } else {
+        toast.error("Already Exist!");
+      }
+    },
+    removeProduct: (state, action: PayloadAction<string>) => {
+      state.cardItems = state.cardItems.filter((i) => i._id !== action.payload);
     },
   },
 });
 
 export default ProductCart.reducer;
-export const { addProduct } = ProductCart.actions
+export const { addProduct, removeProduct } = ProductCart.actions;

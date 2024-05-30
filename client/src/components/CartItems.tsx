@@ -3,8 +3,17 @@ import { LuPlus } from "react-icons/lu";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniMinus } from "react-icons/hi2";
 import { ProductFetch } from "../typeScript/FetchAllProduct";
+import { useDispatch } from "react-redux";
+import { removeProduct } from "../Redux/slices/CartReducer";
 
 const CartItems = (data: ProductFetch) => {
+
+  const dispatch = useDispatch();
+
+  const handleRemove = () => {
+    dispatch(removeProduct(data._id))
+  }
+
   return (
     <section className="flex flex-row gap-4 p-3 relative">
       <p className="border-t-0 border-gray-300 border-[0.01px] top-0 absolute w-full -left-0 " />
@@ -15,7 +24,7 @@ const CartItems = (data: ProductFetch) => {
         alt="cart imtem image"
       />
       <div className="absolute text-center flex items-center justify-center right-6 mt-2 text-lg w-9 hover:bg-slate-200 text-gray-500 duration-500 rounded-full   h-9 ">
-        <FaRegTrashAlt className="" />
+        <FaRegTrashAlt onClick={handleRemove} className="" />
       </div>
 
       <section className="flex flex-col gap-2 p-3">
