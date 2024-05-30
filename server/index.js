@@ -28,6 +28,8 @@ app.get("/", (req, res) => {
     })
 })
 
+app.use("/api/uploads", express.static("uploads"))
+
 app.use("/api/user", User)
 app.use("/api/product", Product)
 

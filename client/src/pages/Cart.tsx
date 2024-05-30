@@ -2,55 +2,78 @@ import { BiSolidOffer } from "react-icons/bi";
 import { FaCircleArrowRight } from "react-icons/fa6";
 import { FaArrowRight } from "react-icons/fa";
 import CartItems from "../components/CartItems";
+import { useSelector } from "react-redux";
+import { ReduxUserState } from "../Redux/store";
+import EmptyCart from "../components/EmptyCart";
 
 const Cart = () => {
+  const { cardItems } = useSelector((state: ReduxUserState) => state.cart);
+  console.log(cardItems);
+
+  let total = 0;
+
+  cardItems.map(i=> total = total + (i.price - i.discount ) )
+
   return (
-    <section className="w-screen flex flex-row m-auto  justify-center mt-12 gap-12 mb-7 px-28">
-      <div className="w-[55%] rounded-xl border border-gray-300">
-        <h1 className="w-full bg-cyan-100 font-semibold p-6 pl-7 rounded-t-lg">Buy Cart</h1>
+    <section className="w-screen flex flex-row m-auto justify-center mt-12 gap-12 mb-7 px-28">
+      {CartItems.length >= 0 ? (
+        <>
+          <div className="w-[55%] rounded-xl border border-gray-300">
+            <h1 className="w-full bg-[#c9e2e8] font-semibold p-6 pl-7 rounded-t-lg">
+              Buy Cart
+            </h1>
+            {cardItems.map((item, index) => (
+              <CartItems
+                discount={item.discount}
+                mainImage={item.mainImage}
+                name={item.name}
+                price={item.price}
+                stock={item.stock}
+                key={index}
+                _id={item._id}
+              />
+            ))}
+            <section className="w-[100%]">
+              <div className="m-5 bg-yellow-200 flex flex-row  rounded-xl justify-between p-4">
+                <div className="flex flex-row gap-2 items-center text-gray-600 text-sm">
+                  <BiSolidOffer className="text-2xl text-yellow-400" />
+                  <span>Offers & Discounts</span>
+                </div>
 
-        <CartItems />
-        <CartItems />
-        <CartItems />
-
-        <section className="w-[100%]">
-          <div className="m-5 bg-yellow-200 flex flex-row  rounded-xl justify-between p-4">
-            <div className="flex flex-row gap-2 items-center text-gray-600 text-sm">
-              <BiSolidOffer className="text-2xl text-yellow-400" />
-              <span>Offers & Discounts</span>
-            </div>
-
-            <div className="flex flex-row gap-2 items-center text-gray-600 text-sm">
-              <span>1 Available</span>
-              <FaCircleArrowRight className="text-2xl text-cyan-500" />
-            </div>
+                <div className="flex flex-row gap-2 items-center text-gray-600 text-sm">
+                  <span>1 Available</span>
+                  <FaCircleArrowRight className="text-2xl text-cyan-500" />
+                </div>
+              </div>
+            </section>
           </div>
-        </section>
-      </div>
+          <div id="work-sans" className="bg-white shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] h-[30%] mt-2 p-4 w-[38%] rounded-md">
+            <section className="flex flex-row justify-between">
+              <div className="flex flex-row justify-between gap-4">
+                <h2 className="font-semibold">Buy Cart</h2>
+                <span>2 items</span>
+              </div>
 
-      <div className="bg-white shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] h-[30%] mt-2 p-4 w-[38%] rounded-md">
+              <div className="flex flex-row justify-between gap-2">
+                <h2 className="font-semibold">₹{total}</h2>
+                <span className="bg-[#b4e1e5] w-5 h-5 text-center rounded-full font-semibold text-sm">
+                  i
+                </span>
+              </div>
+            </section>
 
-        <section className="flex flex-row justify-between">
-          <div className="flex flex-row justify-between gap-4">
-            <h2 className="font-semibold">Buy Cart</h2>
-            <span>2 items</span>
-          </div>
-
-          <div className="flex flex-row justify-between gap-2">
-            <h2 className="font-semibold">₹15,256.00</h2>
-            <span className="bg-cyan-200 w-6 h-6 text-center rounded-full font-semibold text-sm">i</span>
-          </div>
-        </section>
-
-        <button className="flex bg-cyan-500 rounded-full text-white font-bold px-5 w-full justify-between p-4 mt-4">
-          <span className="">₹15,256.00</span>
-          <div className="flex gap-2 justify-center items-center">
-            <span>Proceed</span>
-            <FaArrowRight />
-          </div>
-        </button>
-
-      </div>
+            <button className="flex bg-[#069baa] rounded-full text-white font-bold px-5 w-full justify-between p-4 mt-7 hover:bg-white hover:text-[#069baa] duration-500 hover:shadow-[0px_0px_12px_0px_#1a202c]">
+              <span className="tracking-wider">₹{total}</span>
+              <div className="flex gap-2 uppercase justify-center items-center">
+                <span className="tracking-wide">Proceed</span>
+                <FaArrowRight />
+              </div>
+            </button>
+          </div>{" "}
+        </>
+      ) : (
+        <EmptyCart />
+      )}
     </section>
   );
 };

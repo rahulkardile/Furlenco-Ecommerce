@@ -53,12 +53,12 @@ router.post("/create", verifyUser, upload.single("cover"), async (req, res, next
 router.get("/get/:id", async (req, res, next) => {
     try {
         const { id } = req.params;
-        const Product = await Product.findById(id);
+        const product = await Product.findById(id);
 
         res.status(200).json({
             success: true,
             message: "Got The Blog",
-            data: blog
+            data: product
         })
 
     } catch (error) {
@@ -76,20 +76,18 @@ router.get("/all", async (req, res, next) => {
         ProductData.map(i => {
             data.push({
                 _id: i._id,
-                title: i.title,
-                poster: i.MainPoster,
-                summary: i.summary,
-                auther: {
-                    id: i.auther.id,
-                    name: i.auther.name
-                },
+                name: i.name,
+                mainImage: i.mainImage,
+                discount: i.discount,
+                price: i.price,
+                stock: i.stock
             })
         })
 
         res.status(200).json({
-            message: "Got All Blog's",
+            message: "Product has been Fetched!",
             success: true,
-            blog: data
+            data
         })
 
     } catch (error) {

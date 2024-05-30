@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { FormDataSet, ProductRes } from "../typeScript/FromData";
 import toast from "react-hot-toast";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Create = () => {
   const [formData, setFormData] = useState<FormDataSet>({
