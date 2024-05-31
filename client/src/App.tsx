@@ -11,6 +11,7 @@ import Loader from "./pages/Loader";
 import { AdminAccess } from "./utils/Private";
 import Create from "./pages/Create";
 import ProductPage from "./pages/ProductPage";
+import Addres from "./pages/Addres";
 
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Private = lazy(() => import("./utils/Private"));
@@ -30,6 +31,7 @@ function App() {
 
           <Route element={<Private />}>
             <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Addres />} />
 
             <Route element={<AdminAccess />}>
               <Route path="/create" element={<Create />} />

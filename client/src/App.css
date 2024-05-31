@@ -35,3 +35,10 @@
   font-weight: 500;
   font-variation-settings: 100;
 }
+
+#dot {
+  border: dotted #d0dada 2px;
+  border-bottom: none;
+  width: "100px";
+  margin: 100px auto;
+}

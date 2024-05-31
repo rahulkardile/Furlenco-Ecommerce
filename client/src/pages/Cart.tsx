@@ -5,12 +5,12 @@ import CartItems from "../components/CartItems";
 import { useSelector } from "react-redux";
 import { ReduxUserState } from "../Redux/store";
 import EmptyCart from "../components/EmptyCart";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const { cardItems } = useSelector((state: ReduxUserState) => state.cart);
   let total = 0;
-
-  // (total = total + (i.price - i.discount)
+  const navigate = useNavigate();
 
   cardItems.map((i) => {
     const ItemTotal =
@@ -20,6 +20,11 @@ const Cart = () => {
 
     total += ItemTotal;
   });
+
+  const handleCheckout = () => {
+    navigate("/checkout");
+  };
+
   return (
     <section className="w-screen flex flex-row portrait:items-center portrait:flex-col m-auto justify-center mt-6 md:mt-12 gap-5 md:gap-12 mb-7 md:px-28">
       {total === 0 ? (
@@ -56,7 +61,6 @@ const Cart = () => {
               </div>
             </section>
           </div>
-
           <div
             id="work-sans"
             className="bg-white shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] h-[30%] md:mt-2 portrait:mb-8 p-4 w-11/12 md:w-[38%] rounded-md"
@@ -75,7 +79,10 @@ const Cart = () => {
               </div>
             </section>
 
-            <button className="flex bg-[#069baa] rounded-full text-white font-bold px-5 w-full justify-between p-4 mt-7 hover:bg-white hover:text-[#069baa] duration-500 hover:shadow-[0px_0px_12px_0px_#1a202c]">
+            <button
+              onClick={handleCheckout}
+              className="flex bg-[#069baa] rounded-full text-white font-bold px-5 w-full justify-between p-4 mt-7 hover:bg-white hover:text-[#069baa] duration-500 hover:shadow-[0px_0px_12px_0px_#1a202c]"
+            >
               <span className="tracking-wider">₹{total}</span>
               <div className="flex gap-2 uppercase justify-center items-center">
                 <span className="tracking-wide">Proceed</span>
