@@ -40,13 +40,13 @@ const ProductPage = () => {
   const handleCart = () => {
     if (data !== undefined) {
       dispatch(addProduct(data));
-    }else{
-      toast.error("Undefiended")
+    } else {
+      toast.error("Undefiended");
     }
   };
 
   return (
-    <section className="flex flex-row justify-center m-auto gap-4 w-[80%] p-10">
+    <section className="flex flex-col md:flex-row portrait:items-center justify-center m-auto gap-4 w-full md:w-[80%] sm:p-10">
       <section className="flex flex-col p-4 gap-3">
         <img
           src={`/api/${data?.mainImage}`}
@@ -77,7 +77,7 @@ const ProductPage = () => {
         </div>
       </section>
 
-      <div className="flex flex-col gap-3 mt-5 bg-[#fef4e8] rounded-lg w-[80%] h-fit">
+      <div className="flex flex-col gap-3 mt-5 bg-[#fef4e8] rounded-lg w-full md:w-[80%] h-fit">
         <section className="pt-8 px-8 flex justify-between">
           <div className="w-11/12">
             <h2 className="">Buy Now</h2>
@@ -91,21 +91,31 @@ const ProductPage = () => {
         <section className="flex flex-row justify-between px-8">
           <div className="flex gap-2 items-center">
             <GrRadialSelected className="text-cyan-500" />
-            <h2 className="uppercase">Buy or rent this product</h2>
+            <h2 className="uppercase portrait:text-xs">Buy or rent this product</h2>
           </div>
-          <div className="flex gap-2 items-center ">
+          <div className="flex gap-2 items-center justify-center">
             <span className="text-xs line-through text-gray-600">
               ₹{data?.price}{" "}
             </span>
-            <span className="font-semibold uppercase">-34% OFF</span>
+            <span
+              id="extraSmall"
+              className="font-semibold uppercase bg-yellow-200 rounded-full p-1"
+            >
+              -{discount}% OFF
+            </span>
           </div>
         </section>
+
+        
 
         <section className="flex px-8 flex-col justify-center gap-1">
           <span className="text-xs font-semibold mb-2 ml-3">
             *COD is Awailable
           </span>
-          <button onClick={handleCart} className="flex bg-cyan-500 w-10/12 hover:bg-white hover:text-black duration-300 hover:shadow-[0px_0px_12px_0px_#1a202c] p-3 text-white items-center font-semibold text-lg justify-between rounded-full">
+          <button
+            onClick={handleCart}
+            className="flex bg-cyan-500 portrait:ml-8 w-10/12 hover:bg-white hover:text-black duration-300 hover:shadow-[0px_0px_12px_0px_#1a202c] p-3 text-white items-center font-semibold text-lg justify-between rounded-full"
+          >
             <span className="ml-4">₹{total} </span>
             <section className="flex mr-4 items-center gap-3">
               <span>Go to cart</span>
@@ -164,6 +174,39 @@ const ProductPage = () => {
             </span>
           </div>
           <img src={care} alt="img" className="object-cover" />
+        </section>
+      </div>
+
+      <div className="hidden sticky bottom-0 w-full rounded-t-lg bg-white p-4 portrait:block">
+        <section className="flex flex-row justify-between px-8">
+          <div className="flex gap-2 items-center">
+            <GrRadialSelected className="text-cyan-500" />
+            <h2 className="uppercase text-xs font-semibold">Buy product</h2>
+          </div>
+          <div className="flex gap-2 items-center justify-center">
+            <span className="text-xs line-through text-gray-600">
+              ₹{data?.price}{" "}
+            </span>
+            <span
+              id="extraSmall"
+              className="font-semibold uppercase bg-yellow-200 rounded-full p-1"
+            >
+              -{discount}% OFF
+            </span>
+          </div>
+        </section>
+
+        <section className="flex px-8 flex-col mt-5 justify-center gap-1">
+          <button
+            onClick={handleCart}
+            className="flex bg-cyan-500 portrait:ml-8 w-10/12 hover:bg-white hover:text-black duration-300 hover:shadow-[0px_0px_12px_0px_#1a202c] p-3 text-white items-center font-semibold text-lg justify-between rounded-full"
+          >
+            <span className="ml-4">₹{total} </span>
+            <section className="flex mr-4 items-center gap-3">
+              <span>Go to cart</span>
+              <FaArrowRight />
+            </section>
+          </button>
         </section>
       </div>
     </section>
