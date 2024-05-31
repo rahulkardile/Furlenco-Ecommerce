@@ -83,7 +83,7 @@ const ProductCart = createSlice({
         state.cardItems = [];
         state.cardItems = Products;
       });
-    },
+    }
   },
 });
 

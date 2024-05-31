@@ -10,6 +10,7 @@ import Cart from "./pages/Cart";
 import Loader from "./pages/Loader";
 import { AdminAccess } from "./utils/Private";
 import Create from "./pages/Create";
+import ProductPage from "./pages/ProductPage";
 
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Private = lazy(() => import("./utils/Private"));
@@ -24,6 +25,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/product/:id" element={<ProductPage />} />
           <Route path="*" element={<NotFound />} />
 
           <Route element={<Private />}>

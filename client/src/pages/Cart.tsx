@@ -10,8 +10,16 @@ const Cart = () => {
   const { cardItems } = useSelector((state: ReduxUserState) => state.cart);
   let total = 0;
 
-  cardItems.map((i) => (total = total + (i.price - i.discount)));
+  // (total = total + (i.price - i.discount)
 
+  cardItems.map((i) => {
+    const ItemTotal =
+      i.quantity === undefined
+        ? i.price - i.discount
+        : (i.price - i.discount) * i.quantity;
+
+    total += ItemTotal;
+  });
   return (
     <section className="w-screen flex flex-row m-auto justify-center mt-12 gap-12 mb-7 px-28">
       {total === 0 ? (
@@ -58,7 +66,7 @@ const Cart = () => {
                 <span>{cardItems.length} items</span>
               </div>
 
-              <div className="flex flex-row justify-between gap-2">
+              <div className="flex flex-row items-center select-none justify-between gap-2">
                 <h2 className="font-semibold">₹{total}</h2>
                 <span className="bg-[#b4e1e5] w-5 h-5 text-center rounded-full font-semibold text-sm">
                   i
