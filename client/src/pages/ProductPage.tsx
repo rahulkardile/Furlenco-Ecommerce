@@ -8,17 +8,22 @@ import { FiTruck } from "react-icons/fi";
 import { FaRegThumbsUp } from "react-icons/fa";
 import kyc from "../assets/kyc.png";
 import care from "../assets/care.png";
+import NotFound from "../assets/Not-Found.jpg";
+import { useDispatch } from "react-redux";
+import { addProduct } from "../Redux/slices/CartReducer";
+import toast from "react-hot-toast";
 
 const ProductPage = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
   const [data, setData] = useState<ProducData>();
-
   const getData = async () => {
     const res = await fetch(`/api/product/get/${id}`);
     const { data }: FetchProduct = await res.json();
     setData(data);
   };
 
+  let ready: boolean = false;
   const total = Number(data?.price) - Number(data?.discount);
   let discount = 0;
   if (data !== undefined) {
@@ -26,16 +31,26 @@ const ProductPage = () => {
   }
 
   useEffect(() => {
-    getData();
+    if (ready) {
+      getData();
+    }
+    ready = true;
   }, []);
 
-  const handleCart = () => {};
-  
+  const handleCart = () => {
+    if (data !== undefined) {
+      dispatch(addProduct(data));
+    }else{
+      toast.error("Undefiended")
+    }
+  };
+
   return (
     <section className="flex flex-row justify-center m-auto gap-4 w-[80%] p-10">
       <section className="flex flex-col p-4 gap-3">
         <img
           src={`/api/${data?.mainImage}`}
+          onError={(e) => (e.currentTarget.src = NotFound)}
           className="w-10/12 object-contain"
           alt="Image of Product"
         />
@@ -64,13 +79,13 @@ const ProductPage = () => {
 
       <div className="flex flex-col gap-3 mt-5 bg-[#fef4e8] rounded-lg w-[80%] h-fit">
         <section className="pt-8 px-8 flex justify-between">
-          <div className="">
+          <div className="w-11/12">
             <h2 className="">Buy Now</h2>
             <h2 id="recline" className="text-2xl">
               {data?.name}
             </h2>
           </div>
-          <FaRegHeart className="bg-white text-2xl" />
+          <FaRegHeart className="bg-white text-2xl w-14" />
         </section>
 
         <section className="flex flex-row justify-between px-8">
@@ -90,7 +105,7 @@ const ProductPage = () => {
           <span className="text-xs font-semibold mb-2 ml-3">
             *COD is Awailable
           </span>
-          <button className="flex bg-cyan-500 w-10/12 hover:bg-white hover:text-black duration-300 hover:shadow-[0px_0px_12px_0px_#1a202c] p-3 text-white items-center font-semibold text-lg justify-between rounded-full">
+          <button onClick={handleCart} className="flex bg-cyan-500 w-10/12 hover:bg-white hover:text-black duration-300 hover:shadow-[0px_0px_12px_0px_#1a202c] p-3 text-white items-center font-semibold text-lg justify-between rounded-full">
             <span className="ml-4">₹{total} </span>
             <section className="flex mr-4 items-center gap-3">
               <span>Go to cart</span>

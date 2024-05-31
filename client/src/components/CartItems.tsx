@@ -14,7 +14,7 @@ const CartItems = (data: ProductFetch) => {
   };
 
   const handleQuantity = (op: string) => {
-    if(data.quantity === 1 && op === "minus") return;
+    if (data.quantity === 1 && op === "minus") return;
 
     if (op === "minus") {
       dispatch(quantityUpdate({ _id: data._id, minus: op }));
@@ -27,17 +27,17 @@ const CartItems = (data: ProductFetch) => {
     <section className="flex flex-row gap-4 p-3 relative">
       <p className="border-t-0 border-gray-300 border-[0.01px] top-0 absolute w-full -left-0 " />
       <img
-        className="w-36 h-auto object-contain select-none"
+        className="w-28 md:w-36 h-auto object-contain select-none"
         src={`/api/${data.mainImage}`}
         draggable={false}
         alt="cart imtem image"
       />
-      <div className="absolute text-center flex items-center justify-center right-6 mt-2 text-lg w-9 hover:bg-slate-200 text-gray-500 duration-500 rounded-full   h-9 ">
+      <div className="absolute text-center flex items-center justify-center right-6 mt-2 text-lg w-9 hover:bg-slate-200 text-gray-500 duration-500 rounded-full portrait:bottom-7  h-9 ">
         <FaRegTrashAlt onClick={handleRemove} className="" />
       </div>
 
-      <section className="flex flex-col gap-2 p-3">
-        <h2 className="font-semibold">{data.name}</h2>
+      <section className="flex flex-col gap-2 p-3 w-4/6">
+        <h2 className="font-semibold text-xs md:text-base">{data.name}</h2>
         <div className="flex flex-row gap-2 items-center">
           <span
             id="extraSmall"
@@ -60,7 +60,7 @@ const CartItems = (data: ProductFetch) => {
           <BsTruck className="text-xl text-gray-600" />
           <span className="text-xs text-slate-500">Delivery by 31 may</span>
         </div>
-        <div className="p-2 border border-cyan-500 w-[100px] flex flex-row gap-3 justify-center items-center rounded-full">
+        <div className="p-1 md:p-2 border border-cyan-500 w-[100px] flex flex-row gap-3 justify-center items-center rounded-full">
           <button className="text-cyan-700 hover:bg-gray-300 rounded-full duration-200 p-1">
             <LuPlus onClick={() => handleQuantity("plus")} />
           </button>
@@ -69,7 +69,7 @@ const CartItems = (data: ProductFetch) => {
             <HiMiniMinus onClick={() => handleQuantity("minus")} />
           </button>
         </div>
-        <span className="bg-[#efbe54] p-[10px] rounded-md px-1 absolute bottom-3 left-[199px] text-white font-semibold text-xs/[2px]">{`Only ${
+        <span className="bg-[#efbe54] p-[10px] rounded-md px-1 absolute bottom-2 left-[168px] md:left-[199px] text-white font-semibold text-xs/[2px]">{`Only ${
           data.stock - 1
         } left`}</span>
       </section>
