@@ -1,22 +1,47 @@
-import { TfiLocationPin } from "react-icons/tfi";
-import { IoDocumentTextOutline } from "react-icons/io5";
-import { MdPayment } from "react-icons/md";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { InfoInterface } from "../typeScript/FromData";
+import { useDispatch } from "react-redux";
+import { addAddress } from "../Redux/slices/Address";
+import { useNavigate } from "react-router-dom";
 
-const Addres = () => {
-  const handleChange = () => {};
+const Address = () => {
+  const [newAddress, setAddress] = useState<InfoInterface>({
+    name: "",
+    mobile: 0,
+    pin: 0,
+    address: "",
+    town: "",
+    city: "",
+    state: "",
+    of: "Home",
+  });
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setAddress({
+      ...newAddress,
+      [id]: value,
+    });
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    dispatch(addAddress(newAddress));
+    navigate("/summary");
+  };
 
   return (
     <section className="flex relative flex-col gap-4 m-auto justify-center items-center">
-
-      <div className="flex absolute top-9 left-[40%] w-[20%] flex-row items-center gap-1 text-center">
-        <TfiLocationPin className="w-11 text-2xl text-cyan-400" />
-        <p className="h-[0.5px] w-28 border border-dashed border-black " />
-        <IoDocumentTextOutline className="w-11 text-2xl" />
-        <p className="h-[0.5px] w-28 border border-dashed border-black " />
-        <MdPayment className="w-11 text-2xl" />
-      </div>
-
-      <form className="flex flex-col gap-4 mt-20 w-11/12 md:w-1/3 rounded-lg p-4 border">
+      <h2 id="recline" className="mt-5 text-2xl uppercase">
+        Add Address
+      </h2>
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-4 w-11/12 md:w-1/3 rounded-lg p-4 border"
+      >
         <div className="flex gap-3 flex-col">
           <h2 className="uppercase text-xs font-semibold tracking-wider">
             Contact Details
@@ -27,6 +52,7 @@ const Addres = () => {
             required
             placeholder="Name*"
             id="name"
+            name="contact"
             onChange={handleChange}
           />
           <input
@@ -34,7 +60,9 @@ const Addres = () => {
             className="p-[10px] w-[100%] text-xs rounded outline-none border-gray-400 border-[1px]"
             required
             placeholder="Mobile No*"
+            maxLength={10}
             id="mobile"
+            name="contact"
             onChange={handleChange}
           />
         </div>
@@ -44,11 +72,12 @@ const Addres = () => {
             Address
           </h2>
           <input
-            type="number"
+            type="tel"
             className="p-[10px] w-[100%] text-xs rounded outline-none border-gray-400 border-[1px]"
+            maxLength={6}
             required
             placeholder="Pin Code*"
-            id="pin code"
+            id="pin"
             onChange={handleChange}
           />
           <input
@@ -109,4 +138,4 @@ const Addres = () => {
   );
 };
 
-export default Addres;
+export default Address;

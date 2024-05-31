@@ -11,6 +11,7 @@ const Cart = () => {
   const { cardItems } = useSelector((state: ReduxUserState) => state.cart);
   let total = 0;
   const navigate = useNavigate();
+  const { Address } = useSelector((state: ReduxUserState) => state.address);
 
   cardItems.map((i) => {
     const ItemTotal =
@@ -22,7 +23,8 @@ const Cart = () => {
   });
 
   const handleCheckout = () => {
-    navigate("/checkout");
+    if (Address !== null)
+      return Address.of === "Home" ? navigate("/summary") : navigate("/address");
   };
 
   return (

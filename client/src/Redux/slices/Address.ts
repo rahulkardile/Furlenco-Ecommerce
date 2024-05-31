@@ -1,30 +1,17 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-
-interface InfoInterface {
-  contact: {
-    name: string;
-    mobile: number;
-  };
-  address: {
-    pin: number;
-    address: string;
-    town: string;
-    city: string;
-    state: string;
-  };
-  of: string;
-}
+import { InfoInterface } from "../../typeScript/FromData";
+import toast from "react-hot-toast";
 
 interface Remove {
     id: string
 }
 
 type InfoType = {
-  Address: InfoInterface[] | null;
+  Address: InfoInterface | null;
 };
 
 const initialState: InfoType = {
-  Address: [],
+  Address: null,
 };
 
 const AddressReducer = createSlice({
@@ -32,9 +19,11 @@ const AddressReducer = createSlice({
   initialState,
   reducers: {
     addAddress: (state, action: PayloadAction<InfoInterface>) => {
-      state.Address?.push(action.payload);
+      state.Address = action.payload;
+      toast.success("Address Successfully Added!");
     },
     remove: (state, action: PayloadAction<Remove>)=>{
+        
     }
   },
 });

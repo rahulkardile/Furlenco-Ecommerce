@@ -9,13 +9,14 @@ import Login from "./pages/Login";
 import Cart from "./pages/Cart";
 import Loader from "./pages/Loader";
 import { AdminAccess } from "./utils/Private";
-import Create from "./pages/Create";
-import ProductPage from "./pages/ProductPage";
-import Addres from "./pages/Addres";
 
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Private = lazy(() => import("./utils/Private"));
+const Address = lazy(() => import("./pages/Address"));
 const Register = lazy(() => import("./pages/Register"));
+const Create = lazy(() => import("./pages/Create"));
+const Summery = lazy(() => import("./pages/Summery"));
+const ProductPage = lazy(() => import("./pages/ProductPage"));
 
 function App() {
   return (
@@ -31,7 +32,8 @@ function App() {
 
           <Route element={<Private />}>
             <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Addres />} />
+            <Route path="/address" element={<Address />} />
+            <Route path="/summary" element={<Summery />} />
 
             <Route element={<AdminAccess />}>
               <Route path="/create" element={<Create />} />
