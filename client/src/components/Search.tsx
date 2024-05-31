@@ -15,7 +15,7 @@ const Search = () => {
         className="outline-none w-[90%] pl-2 bg-transparent"
       />
       <button className="absolute right-7 top-3 hover:scale-105">
-        <LiaSearchSolid className="text-base sm:text-2xl" />
+        <LiaSearchSolid className="text-base sm:text-2xl portrait:hidden" />
       </button>
     </form>
   );

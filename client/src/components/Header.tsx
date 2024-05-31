@@ -49,7 +49,7 @@ const Header = () => {
             onMouseEnter={() => setHidden(true)}
             onClick={() => setHidden(!hidden)}
             src={user.ProfileIMG}
-            className="w-6 sm:w-8 rounded-full cursor-pointer select-none object-cover h-6 sm:h-8"
+            className="portrait:w-4 sm:w-8 rounded-full cursor-pointer select-none object-cover portrait:h-4 sm:h-8"
             alt="user"
           />
         ) : (
