@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { ReduxUserState } from "../Redux/store";
 import EmptyCart from "../components/EmptyCart";
 import { useNavigate } from "react-router-dom";
+import { IoIosArrowForward } from "react-icons/io";
 
 const Cart = () => {
   const { cardItems } = useSelector((state: ReduxUserState) => state.cart);
@@ -24,7 +25,9 @@ const Cart = () => {
 
   const handleCheckout = () => {
     if (Address !== null)
-      return Address.of === "Home" ? navigate("/summary") : navigate("/address");
+      return Address.of === "Home"
+        ? navigate("/summary")
+        : navigate("/address");
   };
 
   return (
@@ -91,6 +94,49 @@ const Cart = () => {
                 <FaArrowRight />
               </div>
             </button>
+            {Address?.of === "Home" ? (
+              <>
+                <div className="text-xs p-4 border mt-4 flex flex-col gap-1 bg-white rounded-md">
+                  <div className="flex gap-2 flex-row justify-between">
+                    <h2 className="font-semibold">Delivery to</h2>
+                    <button className="p-1 px-4 border-2 flex gap-2 rounded-full items-center text-cyan-500 font-semibold border-cyan-700 duration-500 hover:bg-cyan-500 hover:text-white">
+                      <span
+                        onClick={() => navigate("/address")}
+                        className="text-xs "
+                      >
+                        Change
+                      </span>
+                      <IoIosArrowForward className="text-lg" />
+                    </button>
+                  </div>
+                  <h2 className="font-semibold text-black text-sm">
+                    {Address?.name}
+                  </h2>
+                  <p className="font-semibold text-xs text-gray-700">
+                    {Address?.address}
+                  </p>
+                  <div className="flex flex-row gap-0">
+                    <span className="text-gray-700 font-semibold">
+                      Contact No:{" "}
+                    </span>
+                    <span className="text-black font-semibold">
+                      {Address?.mobile}
+                    </span>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="">
+                  <button
+                    onClick={() => navigate("/address")}
+                    className="bg-[#069baa] rounded-full text-white font-bold px-5 w-full p-4 mt-7 hover:bg-white hover:text-[#069baa] duration-500 hover:shadow-[0px_0px_12px_0px_#1a202c]"
+                  >
+                    Add Address
+                  </button>
+                </div>
+              </>
+            )}
           </div>{" "}
         </>
       )}

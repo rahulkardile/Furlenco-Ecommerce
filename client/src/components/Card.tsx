@@ -2,15 +2,16 @@ import { FaPlus } from "react-icons/fa6";
 import { ProductFetch } from "../typeScript/FetchAllProduct";
 import ImgError from "../assets/Not-Found.jpg";
 import { useDispatch } from "react-redux";
-import { addProduct } from "../Redux/slices/CartReducer";
+import { addProduct, quantityUpdate } from "../Redux/slices/CartReducer";
 import { useNavigate } from "react-router-dom";
 
 const Card = (data: ProductFetch) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleCart = () => {
+  const handleCart = async () => {
     dispatch(addProduct(data));
+    dispatch(quantityUpdate({ _id: data._id }));
   };
 
   return (

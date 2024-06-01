@@ -3,23 +3,15 @@ import { useSelector } from "react-redux";
 import { ReduxUserState } from "../Redux/store";
 import { FaArrowRight } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
 const Summery = () => {
   const {
     address: { Address },
     cart: Cart,
-    user: User,
   } = useSelector((state: ReduxUserState) => state);
-  // const [address, setAddress] = useState<InfoInterface>({
-  //   address: "",
-  //   city: "",
-  //   mobile: 0,
-  //   name: "",
-  //   of: "",
-  //   pin: 0,
-  //   state: "",
-  //   town: "",
-  // });
+
+  const navigate = useNavigate();
 
   let total = 0;
   let totalMrp = 0;
@@ -30,25 +22,19 @@ const Summery = () => {
       i.quantity === undefined
         ? i.price - i.discount
         : (i.price - i.discount) * i.quantity;
-    discount += i.discount;
-    totalMrp += i.price;
+    if (i.quantity !== undefined) {
+      totalMrp = (totalMrp + i.price) * i.quantity;
+      discount += i.discount * i.quantity;
+    }
     total += ItemTotal;
   });
 
-  // useEffect(() => {
-  //   setAddress({
-  //     address: Address?.address,
-  //     city: Address?.city,
-  //     mobile: Address?.mobile,
-  //     name: Address?.name,
-  //     pin: Address?.pin,
-  //     town: Address?.town,
-  //     of: Address?.of,
-  //     state: Address?.state,
-  //   });
-  // }, []);
-
-  const handleCheckout = () => {};
+  const handleCheckout = () => {
+    if (Address !== null)
+      return Address.of === "Home"
+        ? navigate("/summary")
+        : navigate("/address");
+  };
 
   return (
     <section className="flex relative w-screen pb-20 flex-col bg-gray-100 gap-4 m-auto justify-center items-center">
@@ -57,7 +43,7 @@ const Summery = () => {
       </h2>
 
       <section className="flex flex-row w-full px-20 gap-8">
-        <div className="w-7/12 bg-white rounded-xl">
+        <div className="w-7/12 bg-white h-max rounded-xl">
           <div className="w-full rounded-xl border border-gray-300">
             <h1 className="w-full bg-[#c9e2e8] font-semibold p-6 pl-7 rounded-t-lg">
               Buy Cart {Cart.cardItems.length}
@@ -94,7 +80,16 @@ const Summery = () => {
                 <span className="font-semibold text-gray-700 text-sm">
                   Discount on MRP
                 </span>
-                <span className="font-semibold text-black"> ₹{discount}</span>
+                <span className="font-semibold text-green-700">
+                  {" "}
+                  -₹{discount}
+                </span>
+              </div>
+              <div className="flex flex-row justify-between">
+                <span className="font-semibold text-gray-700 text-sm">
+                  Coupon Discount
+                </span>
+                <span className="font-semibold text-cyan-700">-₹500</span>
               </div>
               <div className="flex flex-row justify-between">
                 <span className="font-semibold text-gray-700 text-sm">
@@ -109,13 +104,27 @@ const Summery = () => {
                 </span>
                 <span className="font-semibold text-green-700">Free</span>
               </div>
+              <p className="border-t-2 border-spacing-52 border-dashed my-3" />
+              <div className="flex flex-row justify-between">
+                <span className="font-semibold text-gray-700 text-sm">
+                  Total Amount
+                </span>
+                <span
+                  id="recline"
+                  style={{ fontWeight: 600 }}
+                  className="text-black"
+                >
+                  {" "}
+                  ₹{total - 500}
+                </span>
+              </div>
             </section>
 
             <button
               onClick={handleCheckout}
               className="flex bg-[#069baa] mt-7 rounded-full text-white font-bold px-5 w-full justify-between p-4 hover:bg-white hover:text-[#069baa] duration-500 hover:shadow-[0px_0px_12px_0px_#1a202c]"
             >
-              <span className="tracking-wider">₹{total}</span>
+              <span className="tracking-wider">₹{total - 500}</span>
               <div className="flex gap-2 uppercase justify-center items-center">
                 <span className="tracking-wide">Proceed</span>
                 <FaArrowRight />
@@ -126,10 +135,15 @@ const Summery = () => {
           <div className="text-xs p-4 border mt-4 flex flex-col gap-1 bg-white rounded-md">
             <div className="flex gap-2 flex-row justify-between">
               <h2 className="font-semibold">Delivery to</h2>
-              <button className="p-1 px-4 border-2 flex gap-2 rounded-full items-center text-cyan-500 font-semibold border-cyan-700">
-                <span className="text-xs">Change</span>
-                <IoIosArrowForward className="text-lg" />
-              </button>
+              <button className="p-1 px-4 border-2 flex gap-2 rounded-full items-center text-cyan-500 font-semibold border-cyan-700 duration-500 hover:bg-cyan-500 hover:text-white">
+                      <span
+                        onClick={() => navigate("/address")}
+                        className="text-xs "
+                      >
+                        Change
+                      </span>
+                      <IoIosArrowForward className="text-lg" />
+                    </button>
             </div>
             <h2 className="font-semibold text-black text-sm">
               {Address?.name}
