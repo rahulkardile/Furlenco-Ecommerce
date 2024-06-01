@@ -122,28 +122,22 @@ const Summery = () => {
 
             <button
               onClick={handleCheckout}
-              className="flex bg-[#069baa] mt-7 rounded-full text-white font-bold px-5 w-full justify-between p-4 hover:bg-white hover:text-[#069baa] duration-500 hover:shadow-[0px_0px_12px_0px_#1a202c]"
+              className="bg-[#069baa] mt-7 rounded-full text-white font-bold px-5 w-full tracking-widest p-4 hover:bg-white hover:text-[#069baa] duration-500 hover:shadow-[0px_0px_12px_0px_#1a202c]"
             >
-              <span className="tracking-wider">₹{total - 500}</span>
-              <div className="flex gap-2 uppercase justify-center items-center">
-                <span className="tracking-wide">Proceed</span>
-                <FaArrowRight />
-              </div>
+              Process
             </button>
           </div>
 
           <div className="text-xs p-4 border mt-4 flex flex-col gap-1 bg-white rounded-md">
             <div className="flex gap-2 flex-row justify-between">
               <h2 className="font-semibold">Delivery to</h2>
-              <button className="p-1 px-4 border-2 flex gap-2 rounded-full items-center text-cyan-500 font-semibold border-cyan-700 duration-500 hover:bg-cyan-500 hover:text-white">
-                      <span
-                        onClick={() => navigate("/address")}
-                        className="text-xs "
-                      >
-                        Change
-                      </span>
-                      <IoIosArrowForward className="text-lg" />
-                    </button>
+              <button
+                onClick={() => navigate("/address")}
+                className="p-1 px-4 border-2 flex gap-2 rounded-full items-center text-cyan-500 font-semibold border-cyan-700 duration-500 hover:bg-cyan-500 hover:text-white"
+              >
+                <span className="text-xs ">Change</span>
+                <IoIosArrowForward className="text-lg" />
+              </button>
             </div>
             <h2 className="font-semibold text-black text-sm">
               {Address?.name}
