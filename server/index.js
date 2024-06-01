@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser"
 
 import User from "./routes/User.js"
 import Product from "./routes/Product.js"
+import Order from "./routes/Order.js"
 
 const app = express();
 app.use(express.json());
@@ -32,6 +33,7 @@ app.use("/api/uploads", express.static("uploads"));
 
 app.use("/api/user", User)
 app.use("/api/product", Product)
+app.use("/api/order", Order);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 400;

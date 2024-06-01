@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import Product from "./Product";
 
 const OrderSchema = new mongoose.Schema({
     user: {
@@ -74,11 +73,15 @@ const OrderSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    orderId: {
+    discount: {
+        type: Number,
+        required: true
+    },
+    razorpay_orderID: {
         type: String,
         required: true
     },
-    paymentId: {
+    razorpay_paymentID: {
         type: String,
         required: true
     },
