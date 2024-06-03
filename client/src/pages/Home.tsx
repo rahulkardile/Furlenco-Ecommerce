@@ -32,7 +32,7 @@ const Home = () => {
           Latest Products
         </h1>
 
-        <section className="flex gap-8 justify-evenly mt-7 items-center flex-wrap">
+        <section className="flex gap-8 justify-start mt-7 items-center flex-wrap">
           {data?.map((i) => (
             <Card
               _id={i._id}

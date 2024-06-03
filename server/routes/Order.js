@@ -1,7 +1,7 @@
 import express from "express";
 import Order from '../models/Order.js';
-import Razorpay from "razorpay";
 import verifyUser from "../utils/VerifyUser.js";
+import Razorpay from "razorpay"
 import crypto from "crypto"
 import ErrorHandler from "../utils/ErrorHandler.js";
 
@@ -9,22 +9,21 @@ const routes = express.Router();
 
 routes.post("/checkout", verifyUser, async (req, res, next) => {
     try {
-
         const { amount } = req.body;
-
-        if (!amount) {
-            return next(ErrorHandler(400, "Amount is Required!"));
-        }
 
         const instance = new Razorpay({
             key_id: process.env.KEY_ID,
             key_secret: process.env.KEY_SECRET
         })
 
+        if (!amount) {
+            return next(ErrorHandler(400, "Amount is Required!"));
+        }
         const options = {
-            amount: Number(amount * 10),
             currency: "INR",
-            receipt: crypto.randomBytes(10).toString("hex")
+            amount: Number(amount * 100),
+            receipt: "receipt1",
+            payment_capture: 0
         }
 
         instance.orders.create(options, (error, order) => {
@@ -34,6 +33,7 @@ routes.post("/checkout", verifyUser, async (req, res, next) => {
             } else {
                 res.status(200).json({
                     success: true,
+                    key: process.env.KEY_ID,
                     order
                 })
             }
@@ -53,15 +53,32 @@ routes.post("/verify", verifyUser, async (req, res, next) => {
             razorpay_paymentID,
             razorpay_signature,
             products,
-            shippingInfo,
+            address,
             amount,
             discount
-         } = req.body;
+        } = req.body;
 
-         console.log(req.body);
+        const newOrder = await Order.create({
+            address,
+            amount,
+            discount,
+            products,
+            razorpay_orderID,
+            address,
+            razorpay_paymentID,
+            signature: razorpay_signature,
+            user: {
+                id: _id,
+                name,
+                email
+            }
+        })
+
+        console.log(newOrder);
 
     } catch (error) {
         next(error);
+        console.log(error);
     }
 })
 

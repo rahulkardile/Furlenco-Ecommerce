@@ -22,11 +22,11 @@ const AddressReducer = createSlice({
       state.Address = action.payload;
       toast.success("Address Successfully Added!");
     },
-    remove: (state, action: PayloadAction<Remove>)=>{
-        
+    removeAddress: (state)=>{
+        state.Address = null;
     }
   },
 });
 
 export default AddressReducer.reducer;
-export const { addAddress, remove } = AddressReducer.actions;
+export const { addAddress, removeAddress } = AddressReducer.actions;

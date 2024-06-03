@@ -1,7 +1,11 @@
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import Empty from "../assets/empty-shopping.jpg";
+import { useNavigate } from "react-router-dom";
 
 const EmptyCart = () => {
+
+  const navigate = useNavigate();
+
   return (
     <div className="flex md:gap-3 flex-col items-center w-full sm:w-2/3">
       <section>
@@ -24,13 +28,13 @@ const EmptyCart = () => {
           </span>
         </div>
         <div className="flex flex-row justify-between">
-          <button className="flex justify-between bg-[#6e7bc1] p-4 text-xs sm:text-xl rounded-l-full items-center text-white w-1/2">
+          <button onClick={()=>navigate("/")} className="flex justify-between bg-[#6e7bc1] p-4 text-xs sm:text-xl rounded-l-full items-center text-white w-1/2">
             <FaArrowLeft className="ml-4" />
             <span id="recline" className="mr-4">
               Explore Buying
             </span>
           </button>
-          <button className="flex justify-between bg-[#f48c55] p-1 sm:p-4 text-xs sm:text-xl items-center rounded-r-full text-white w-1/2">
+          <button onClick={()=>navigate("/")} className="flex justify-between bg-[#f48c55] p-1 sm:p-4 text-xs sm:text-xl items-center rounded-r-full text-white w-1/2">
             <span id="recline" className="ml-4">
               Explore Renting
             </span>

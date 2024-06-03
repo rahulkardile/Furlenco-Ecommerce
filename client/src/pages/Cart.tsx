@@ -99,13 +99,11 @@ const Cart = () => {
                 <div className="text-xs p-4 border mt-4 flex flex-col gap-1 bg-white rounded-md">
                   <div className="flex gap-2 flex-row justify-between">
                     <h2 className="font-semibold">Delivery to</h2>
-                    <button className="p-1 px-4 border-2 flex gap-2 rounded-full items-center text-cyan-500 font-semibold border-cyan-700 duration-500 hover:bg-cyan-500 hover:text-white">
-                      <span
-                        onClick={() => navigate("/address")}
-                        className="text-xs "
-                      >
-                        Change
-                      </span>
+                    <button
+                      onClick={() => navigate("/address")}
+                      className="p-1 px-4 border-2 flex gap-2 rounded-full items-center text-cyan-500 font-semibold border-cyan-700 duration-500 hover:bg-cyan-500 hover:text-white"
+                    >
+                      <span className="text-xs ">Change</span>
                       <IoIosArrowForward className="text-lg" />
                     </button>
                   </div>

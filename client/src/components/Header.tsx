@@ -9,6 +9,8 @@ import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { removeUser } from "../Redux/slices/UserReducer";
 import Search from "./Search";
+import { removeAll } from "../Redux/slices/CartReducer";
+import { removeAddress } from "../Redux/slices/Address";
 
 const Header = () => {
   const [hidden, setHidden] = useState<boolean>(false);
@@ -23,6 +25,8 @@ const Header = () => {
     if (success) {
       toast.success(message);
       dispatch(removeUser());
+      dispatch(removeAll());
+      dispatch(removeAddress());
     } else {
       toast.error("Can't Logout!");
     }

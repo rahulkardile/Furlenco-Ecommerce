@@ -60,7 +60,7 @@ const CartItems = (data: ProductFetch) => {
           <BsTruck className="text-xl text-gray-600" />
           <span className="text-xs text-slate-500">Delivery by 31 may</span>
         </div>
-        <div className="p-1 md:p-2 border border-cyan-500 w-[100px] flex flex-row gap-3 justify-center items-center rounded-full">
+        <div className="p-1 md:p-2 border relative border-cyan-500 w-[100px] flex flex-row gap-3 justify-center items-center rounded-full">
           <button className="text-cyan-700 hover:bg-gray-300 rounded-full duration-200 p-1">
             <LuPlus onClick={() => handleQuantity("plus")} />
           </button>
@@ -68,10 +68,10 @@ const CartItems = (data: ProductFetch) => {
           <button className="text-cyan-700 hover:bg-gray-300 rounded-full duration-200 p-1">
             <HiMiniMinus onClick={() => handleQuantity("minus")} />
           </button>
+          <span className="bg-[#efbe54] absolute p-[10px] rounded-md px-1 w-20 text-center -bottom-3 text-white font-semibold text-xs/[2px]">{`Only ${
+            data.stock - data.quantity
+          } left`}</span>
         </div>
-        <span className="bg-[#efbe54] p-[10px] rounded-md px-1 absolute bottom-2 left-[168px] md:left-[199px] text-white font-semibold text-xs/[2px]">{`Only ${
-          data.stock - 1
-        } left`}</span>
       </section>
     </section>
   );

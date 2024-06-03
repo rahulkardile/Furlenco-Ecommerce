@@ -1,14 +1,18 @@
 import CartItems from "../components/CartItems";
 import { useSelector } from "react-redux";
 import { ReduxUserState } from "../Redux/store";
-import { FaArrowRight } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import Icon from "../assets/app_icon.jpeg";
+import { useState } from "react";
 
 const Summery = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const {
     address: { Address },
     cart: Cart,
+    user: { user },
   } = useSelector((state: ReduxUserState) => state);
 
   const navigate = useNavigate();
@@ -29,16 +33,117 @@ const Summery = () => {
     total += ItemTotal;
   });
 
-  const handleCheckout = () => {
-    if (Address !== null)
-      return Address.of === "Home"
-        ? navigate("/summary")
-        : navigate("/address");
+  const handleCheckout = async () => {
+    setLoading(true);
+
+    const data = await fetch("/api/order/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: total - 500 }),
+    });
+
+    const { success, key, order } = await data.json();
+
+    if (!success) {
+      toast.error("Can't Process Payment!");
+    }
+
+    console.log(order, key);
+
+    const options = {
+      key,
+      amount: order.amount,
+      currency: "INR",
+      name: "StoryIn",
+      description:
+        "StoryIn is a best audio book plateform to upgrade yourself by listing new audio books.",
+      order_id: order.id,
+      image: Icon,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      handler: async (response: any) => {
+        let Total = 0;
+        const productsArr: {
+          _id: string;
+          price: number;
+          quantity: number | undefined;
+          discount: number;
+          sellingPrice: number;
+        }[] = [];
+
+        Cart.cardItems.map((i) => {
+          const _id = i._id;
+          const price = i.price;
+          const discount = i.discount;
+          const sellingPrice = i.price - i.discount - 500;
+          Total += sellingPrice;
+
+          productsArr.push({
+            _id,
+            price,
+            quantity: i.quantity,
+            discount,
+            sellingPrice,
+          });
+        });
+
+        const Info = await fetch("/api/order/verify", {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            razorpay_orderID: response.razorpay_order_id,
+            razorpay_paymentID: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+            amount: Total,
+            address: {
+              name: Address?.name,
+              mobile: Address?.mobile,
+              pin: Address?.pin,
+              addressWild: Address?.address,
+              town: Address?.town,
+              city: Address?.city,
+              state: Address?.state,
+              of: Address?.of,
+            },
+            products: productsArr,
+            discount,
+          }),
+        });
+
+        const { success } = await Info.json();
+        setLoading(false);
+        if (success === true) {
+          toast.success("Subscription Successfull");
+          console.log(success);
+          // dispatch(addStatus());
+          navigate("/");
+        } else {
+          toast.error("Payment Failed!");
+          setLoading(false);
+        }
+      },
+
+      prefill: {
+        name: user?.name,
+        email: user?.email,
+        contact: "1234567890",
+      },
+      notes: {
+        address: "Maharashtra, Sambajinager, Padampura",
+      },
+      theme: {
+        color: "white",
+      },
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const rzp1 = await new (window as any).Razorpay(options);
+    rzp1.open();
   };
 
   return (
     <section className="flex relative w-screen pb-20 flex-col bg-gray-100 gap-4 m-auto justify-center items-center">
-      <h2 id="recline" className="my-7 text-2xl uppercase">
+      <h2 id="recline" className="mt-7 text-2xl uppercase">
         Order Summary
       </h2>
 
@@ -121,10 +226,11 @@ const Summery = () => {
             </section>
 
             <button
+              disabled={loading}
               onClick={handleCheckout}
               className="bg-[#069baa] mt-7 rounded-full text-white font-bold px-5 w-full tracking-widest p-4 hover:bg-white hover:text-[#069baa] duration-500 hover:shadow-[0px_0px_12px_0px_#1a202c]"
             >
-              Process
+              Process Order
             </button>
           </div>
 
@@ -145,6 +251,10 @@ const Summery = () => {
             <p className="font-semibold text-xs text-gray-700">
               {Address?.address}
             </p>
+            <p className="font-semibold text-xs text-gray-700">
+              {Address?.town}, {Address?.city}, {Address?.state}
+            </p>
+            <p className="font-semibold text-xs text-gray-700"></p>
             <div className="flex flex-row gap-0">
               <span className="text-gray-700 font-semibold">Contact No: </span>
               <span className="text-black font-semibold">

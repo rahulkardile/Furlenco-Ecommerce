@@ -18,19 +18,27 @@ const OrderSchema = new mongoose.Schema({
     },
     products: [
         {
-            ProductId: {
+            _id: {
                 type: mongoose.Types.ObjectId,
                 ref: "Product",
                 required: true,
             },
-            quentity: {
+            quantity: {
                 type: Number,
                 required: true,
             },
-            totalPrice: {
+            price: {
                 type: Number,
                 required: true,
-            }
+            },
+            sellingPrice: {
+                type: Number,
+                required: true,
+            },
+            discount: {
+                type: Number,
+                required: true,
+            },
         }
     ],
     address: {
@@ -40,7 +48,7 @@ const OrderSchema = new mongoose.Schema({
         },
         mobile: {
             type: Number,
-            max: 10,
+            min: 10,
             required: true
         },
         pin: {
