@@ -1,11 +1,14 @@
 import CartItems from "../components/CartItems";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ReduxUserState } from "../Redux/store";
 import { IoIosArrowForward } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Icon from "../assets/app_icon.jpeg";
 import { useState } from "react";
+import { removeAll } from "../Redux/slices/CartReducer";
+import NotFound from "./NotFound";
+import EmptyCart from "../components/EmptyCart";
 
 const Summery = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -16,6 +19,7 @@ const Summery = () => {
   } = useSelector((state: ReduxUserState) => state);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   let total = 0;
   let totalMrp = 0;
@@ -110,12 +114,12 @@ const Summery = () => {
           }),
         });
 
-        const { success } = await Info.json();
-        setLoading(false);
+        const { success, message } = await Info.json();
+
         if (success === true) {
-          toast.success("Subscription Successfull");
-          console.log(success);
-          // dispatch(addStatus());
+          setLoading(false);
+          toast.success(message);
+          dispatch(removeAll());
           navigate("/");
         } else {
           toast.error("Payment Failed!");
@@ -139,6 +143,7 @@ const Summery = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const rzp1 = await new (window as any).Razorpay(options);
     rzp1.open();
+    setLoading(false);
   };
 
   return (
@@ -146,124 +151,129 @@ const Summery = () => {
       <h2 id="recline" className="mt-7 text-2xl uppercase">
         Order Summary
       </h2>
-
-      <section className="flex flex-row w-full px-20 gap-8">
-        <div className="w-7/12 bg-white h-max rounded-xl">
-          <div className="w-full rounded-xl border border-gray-300">
-            <h1 className="w-full bg-[#c9e2e8] font-semibold p-6 pl-7 rounded-t-lg">
-              Buy Cart {Cart.cardItems.length}
-            </h1>
-            {Cart.cardItems.map((item, index) => (
-              <CartItems
-                discount={item.discount}
-                mainImage={item.mainImage}
-                quantity={item.quantity}
-                name={item.name}
-                price={item.price}
-                stock={item.stock}
-                key={index}
-                _id={item._id}
-              />
-            ))}
-          </div>
-        </div>
-
-        <div className="w-5/12">
-          <div className="bg-white rounded-xl p-5 m-auto">
-            <section className="flex flex-col gap-2">
-              <h1 className="font-semibold">
-                Price Details {Cart.cardItems.length} Items
+      { total === 0 ? (
+        <EmptyCart />
+      ) : (
+        <section className="flex flex-row w-full px-20 gap-8">
+          <div className="w-7/12 bg-white h-max rounded-xl">
+            <div className="w-full rounded-xl border border-gray-300">
+              <h1 className="w-full bg-[#c9e2e8] font-semibold p-6 pl-7 rounded-t-lg">
+                Buy Cart {Cart.cardItems.length}
               </h1>
-
-              <div className="flex flex-row justify-between">
-                <span className="font-semibold text-gray-700 text-sm">
-                  Total MRP
-                </span>
-                <span className="font-semibold text-black">₹{totalMrp}</span>
-              </div>
-              <div className="flex flex-row justify-between">
-                <span className="font-semibold text-gray-700 text-sm">
-                  Discount on MRP
-                </span>
-                <span className="font-semibold text-green-700">
-                  {" "}
-                  -₹{discount}
-                </span>
-              </div>
-              <div className="flex flex-row justify-between">
-                <span className="font-semibold text-gray-700 text-sm">
-                  Coupon Discount
-                </span>
-                <span className="font-semibold text-cyan-700">-₹500</span>
-              </div>
-              <div className="flex flex-row justify-between">
-                <span className="font-semibold text-gray-700 text-sm">
-                  Plateform Fee
-                </span>
-                <span className="font-semibold text-green-700">Free</span>
-              </div>
-              <div className="flex flex-row justify-between">
-                <span className="font-semibold flex flex-col text-gray-700 text-sm">
-                  <span>Shipping Fee</span>
-                  <span className="text-xs">Free Shiping for you</span>
-                </span>
-                <span className="font-semibold text-green-700">Free</span>
-              </div>
-              <p className="border-t-2 border-spacing-52 border-dashed my-3" />
-              <div className="flex flex-row justify-between">
-                <span className="font-semibold text-gray-700 text-sm">
-                  Total Amount
-                </span>
-                <span
-                  id="recline"
-                  style={{ fontWeight: 600 }}
-                  className="text-black"
-                >
-                  {" "}
-                  ₹{total - 500}
-                </span>
-              </div>
-            </section>
-
-            <button
-              disabled={loading}
-              onClick={handleCheckout}
-              className="bg-[#069baa] mt-7 rounded-full text-white font-bold px-5 w-full tracking-widest p-4 hover:bg-white hover:text-[#069baa] duration-500 hover:shadow-[0px_0px_12px_0px_#1a202c]"
-            >
-              Process Order
-            </button>
+              {Cart.cardItems.map((item, index) => (
+                <CartItems
+                  discount={item.discount}
+                  mainImage={item.mainImage}
+                  quantity={item.quantity}
+                  name={item.name}
+                  price={item.price}
+                  stock={item.stock}
+                  key={index}
+                  _id={item._id}
+                />
+              ))}
+            </div>
           </div>
 
-          <div className="text-xs p-4 border mt-4 flex flex-col gap-1 bg-white rounded-md">
-            <div className="flex gap-2 flex-row justify-between">
-              <h2 className="font-semibold">Delivery to</h2>
+          <div className="w-5/12">
+            <div className="bg-white rounded-xl p-5 m-auto">
+              <section className="flex flex-col gap-2">
+                <h1 className="font-semibold">
+                  Price Details {Cart.cardItems.length} Items
+                </h1>
+
+                <div className="flex flex-row justify-between">
+                  <span className="font-semibold text-gray-700 text-sm">
+                    Total MRP
+                  </span>
+                  <span className="font-semibold text-black">₹{totalMrp}</span>
+                </div>
+                <div className="flex flex-row justify-between">
+                  <span className="font-semibold text-gray-700 text-sm">
+                    Discount on MRP
+                  </span>
+                  <span className="font-semibold text-green-700">
+                    {" "}
+                    -₹{discount}
+                  </span>
+                </div>
+                <div className="flex flex-row justify-between">
+                  <span className="font-semibold text-gray-700 text-sm">
+                    Coupon Discount
+                  </span>
+                  <span className="font-semibold text-cyan-700">-₹500</span>
+                </div>
+                <div className="flex flex-row justify-between">
+                  <span className="font-semibold text-gray-700 text-sm">
+                    Plateform Fee
+                  </span>
+                  <span className="font-semibold text-green-700">Free</span>
+                </div>
+                <div className="flex flex-row justify-between">
+                  <span className="font-semibold flex flex-col text-gray-700 text-sm">
+                    <span>Shipping Fee</span>
+                    <span className="text-xs">Free Shiping for you</span>
+                  </span>
+                  <span className="font-semibold text-green-700">Free</span>
+                </div>
+                <p className="border-t-2 border-spacing-52 border-dashed my-3" />
+                <div className="flex flex-row justify-between">
+                  <span className="font-semibold text-gray-700 text-sm">
+                    Total Amount
+                  </span>
+                  <span
+                    id="recline"
+                    style={{ fontWeight: 600 }}
+                    className="text-black"
+                  >
+                    {" "}
+                    ₹{total - 500}
+                  </span>
+                </div>
+              </section>
+
               <button
-                onClick={() => navigate("/address")}
-                className="p-1 px-4 border-2 flex gap-2 rounded-full items-center text-cyan-500 font-semibold border-cyan-700 duration-500 hover:bg-cyan-500 hover:text-white"
+                disabled={loading}
+                onClick={handleCheckout}
+                className="bg-[#069baa] mt-7 rounded-full text-white font-bold px-5 w-full tracking-widest p-4 hover:bg-white hover:text-[#069baa] duration-500 hover:shadow-[0px_0px_12px_0px_#1a202c]"
               >
-                <span className="text-xs ">Change</span>
-                <IoIosArrowForward className="text-lg" />
+                Process Order
               </button>
             </div>
-            <h2 className="font-semibold text-black text-sm">
-              {Address?.name}
-            </h2>
-            <p className="font-semibold text-xs text-gray-700">
-              {Address?.address}
-            </p>
-            <p className="font-semibold text-xs text-gray-700">
-              {Address?.town}, {Address?.city}, {Address?.state}
-            </p>
-            <p className="font-semibold text-xs text-gray-700"></p>
-            <div className="flex flex-row gap-0">
-              <span className="text-gray-700 font-semibold">Contact No: </span>
-              <span className="text-black font-semibold">
-                {Address?.mobile}
-              </span>
+
+            <div className="text-xs p-4 border mt-4 flex flex-col gap-1 bg-white rounded-md">
+              <div className="flex gap-2 flex-row justify-between">
+                <h2 className="font-semibold">Delivery to</h2>
+                <button
+                  onClick={() => navigate("/address")}
+                  className="p-1 px-4 border-2 flex gap-2 rounded-full items-center text-cyan-500 font-semibold border-cyan-700 duration-500 hover:bg-cyan-500 hover:text-white"
+                >
+                  <span className="text-xs ">Change</span>
+                  <IoIosArrowForward className="text-lg" />
+                </button>
+              </div>
+              <h2 className="font-semibold text-black text-sm">
+                {Address?.name}
+              </h2>
+              <p className="font-semibold text-xs text-gray-700">
+                {Address?.address}
+              </p>
+              <p className="font-semibold text-xs text-gray-700">
+                {Address?.town}, {Address?.city}, {Address?.state}
+              </p>
+              <p className="font-semibold text-xs text-gray-700"></p>
+              <div className="flex flex-row gap-0">
+                <span className="text-gray-700 font-semibold">
+                  Contact No:{" "}
+                </span>
+                <span className="text-black font-semibold">
+                  {Address?.mobile}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </section>
   );
 };

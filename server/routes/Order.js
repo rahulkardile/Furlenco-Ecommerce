@@ -74,8 +74,11 @@ routes.post("/verify", verifyUser, async (req, res, next) => {
             }
         })
 
-        console.log(newOrder);
-
+        res.status(200).json({
+            success: true,
+            message: "Order has been placed!"
+        })
+        
     } catch (error) {
         next(error);
         console.log(error);
