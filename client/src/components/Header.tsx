@@ -77,29 +77,43 @@ const Header = () => {
       <dialog
         onMouseLeave={() => setHidden(false)}
         open={hidden ? true : false}
-        className={`absolute z-50 left-[95%]  bg-white border border-cyan-500 p-2 w-[100px] sm:w-[200px] mr-10 sm:mr-16 bg-grey-100 rounded-lg portrait:top-12 top-20`}
+        className={`absolute z-50 right-1 bg-white border border-cyan-500 p-2 w-[190px] sm:w-[200px] mr-10 sm:mr-16 bg-grey-100 rounded-lg portrait:top-12 top-20`}
       >
-        <section className="flex flex-col select-none gap-1 sm:gap-2 items-center w-full">
+        <section
+          className={`flex flex-col  select-none gap-1 px-2 sm:gap-2 ${
+            user?._id ? " " : "items-center"
+          } w-full`}
+        >
           {user?._id ? (
             <>
-              <Link to={"/profile"} className="hover:underline">
-                Profile
+              <div className="">
+                <h2 className="font-semibold text-sm">Hello {user.name}</h2>
+                <p className="text-xs">{user.email}</p>
+                <p className="border-b p-1" />
+              </div>
+
+              <Link to={"/orders"} className="hover:underline pl-3 text-xs">
+                Order
+              </Link>
+
+              <Link to={"/orders"} className="hover:underline pl-3 text-xs">
+                Wishlist
+              </Link>
+
+              <Link to={"/orders"} className="hover:underline pl-3 text-xs">
+                Contact Us
               </Link>
               {user.role === "admin" ? (
-                <Link to={"/create"} className="hover:underline">
-                  Create
+                <Link to={"/create"} className="hover:underline pl-3 text-xs">
+                  Create Product
                 </Link>
               ) : (
                 ""
               )}
-
-              <Link to={"/contact"} className="hover:underline">
-                Contact us
-              </Link>
-
+              <p className="border-b" />
               <button
                 onClick={handleLogout}
-                className="duration-200 text-base hover:text-red-600"
+                className="duration-200 text-xs pb-1 text-start pl-3 hover:text-red-600"
               >
                 Logout
               </button>

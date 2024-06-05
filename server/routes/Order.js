@@ -1,9 +1,10 @@
-import express from "express";
+import express, { Router } from "express";
 import Order from '../models/Order.js';
 import verifyUser from "../utils/VerifyUser.js";
 import Razorpay from "razorpay"
 import crypto from "crypto"
 import ErrorHandler from "../utils/ErrorHandler.js";
+import { get } from "mongoose";
 
 const routes = express.Router();
 
@@ -54,6 +55,7 @@ routes.post("/verify", verifyUser, async (req, res, next) => {
             razorpay_signature,
             products,
             address,
+            productId,
             amount,
             discount
         } = req.body;
@@ -67,6 +69,8 @@ routes.post("/verify", verifyUser, async (req, res, next) => {
             address,
             razorpay_paymentID,
             signature: razorpay_signature,
+            UserId: _id,
+            productId,
             user: {
                 id: _id,
                 name,
@@ -78,10 +82,51 @@ routes.post("/verify", verifyUser, async (req, res, next) => {
             success: true,
             message: "Order has been placed!"
         })
-        
+
     } catch (error) {
         next(error);
         console.log(error);
+    }
+})
+
+routes.get("/myorder", verifyUser, async (req, res, next) => {
+    try {
+        const { _id, name, email } = req.user;
+
+        if (!name) return next(ErrorHandler(401, "User Not Signed In!"))
+
+        const user = {
+            id: _id,
+            name,
+            email
+        }
+
+        const getData = await Order.find({ UserId: _id }).select(["products", "amount", "discount", "address", "_id", "UserId"]).populate({ path: "productId", model: "Product", select: ['name', 'price', 'mainImage', '_id'] })
+
+        res.status(200).json(getData);
+
+    } catch (error) {
+        next(error);
+    }
+})
+
+routes.get("/allorders", verifyUser, async (req, res, next) => {
+    try {
+
+        const { _id, name, email } = req.user;
+
+        const user = {
+            id: _id,
+            name,
+            email
+        }
+        const getData = await Order.find();
+
+        console.log(user);
+        res.status(200).json(getData);
+
+    } catch (error) {
+        next(error);
     }
 })
 

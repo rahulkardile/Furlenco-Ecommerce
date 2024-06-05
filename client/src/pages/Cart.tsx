@@ -24,10 +24,11 @@ const Cart = () => {
   });
 
   const handleCheckout = () => {
-    if (Address !== null)
-      return Address.of === "Home"
-        ? navigate("/summary")
-        : navigate("/address");
+    if (Address === null) {
+      navigate("/address");
+    } else {
+      navigate("/summary");
+    }
   };
 
   return (

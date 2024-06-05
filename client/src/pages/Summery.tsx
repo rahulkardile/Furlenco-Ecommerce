@@ -52,8 +52,6 @@ const Summery = () => {
       toast.error("Can't Process Payment!");
     }
 
-    console.log(order, key);
-
     const options = {
       key,
       amount: order.amount,
@@ -69,10 +67,13 @@ const Summery = () => {
         const productsArr: {
           _id: string;
           price: number;
+          name: string;
           quantity: number | undefined;
           discount: number;
           sellingPrice: number;
         }[] = [];
+
+       const productId: string[] = [];
 
         Cart.cardItems.map((i) => {
           const _id = i._id;
@@ -84,10 +85,13 @@ const Summery = () => {
           productsArr.push({
             _id,
             price,
+            name: i.name,
             quantity: i.quantity,
             discount,
             sellingPrice,
           });
+
+          productId.push(i._id)
         });
 
         const Info = await fetch("/api/order/verify", {
@@ -99,6 +103,7 @@ const Summery = () => {
             razorpay_paymentID: response.razorpay_payment_id,
             razorpay_signature: response.razorpay_signature,
             amount: Total,
+            productId,
             address: {
               name: Address?.name,
               mobile: Address?.mobile,

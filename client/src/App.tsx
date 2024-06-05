@@ -16,6 +16,9 @@ const Address = lazy(() => import("./pages/Address"));
 const Register = lazy(() => import("./pages/Register"));
 const Create = lazy(() => import("./pages/Create"));
 const Summery = lazy(() => import("./pages/Summery"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Order = lazy(() => import("./pages/Order"));
 const ProductPage = lazy(() => import("./pages/ProductPage"));
 
 function App() {
@@ -31,8 +34,11 @@ function App() {
           <Route path="*" element={<NotFound />} />
 
           <Route element={<Private />}>
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/address" element={<Address />} />
+            <Route path="/orders" element={<Order />} />
             <Route path="/summary" element={<Summery />} />
 
             <Route element={<AdminAccess />}>
