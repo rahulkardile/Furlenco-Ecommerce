@@ -2,9 +2,11 @@ import { IoIosArrowForward } from "react-icons/io";
 import OrderItem from "../components/OrderItem";
 import { useEffect, useState } from "react";
 import { order } from "../typeScript/Order";
+import toast from "react-hot-toast";
 
 const Order = () => {
   const [Orders, setOrders] = useState<order[]>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const data = async () => {
     const res = await fetch("/api/order/myorder");
@@ -20,6 +22,20 @@ const Order = () => {
     }
     ready = true;
   }, []);
+
+  const handleReciept = async (id: string) => {
+    setLoading(true);
+    toast.success("We Are working on invoice");
+    const getData = await fetch(`/api/order/invoice/${id}`);
+    const { success, message } = await getData.json();
+    if (success) {
+      setLoading(false);
+      toast.success(message);
+    } else {
+      setLoading(false);
+      toast.error("Got Problem During Invoice Creation!");
+    }
+  };
 
   return (
     <>
@@ -88,18 +104,27 @@ const Order = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-6 w-5/6 mt-10">
+        <div className="flex flex-col gap-6 w-[90%] mt-10">
           {Orders?.map((i) => (
-            <div className="p-2 border hover:shadow-[0px_6px_9px_0px_#00000024] duration-300 rounded-md flex flex-col gap-1">
-              {i.productId.map((item, index) => (
-                <OrderItem
-                  name={item.name}
-                  img={item.mainImage}
-                  _id={item._id}
-                  price={i.products[index].sellingPrice}
-                  quantity={i.products[index].quantity}
-                />
-              ))}
+            <div className="flex flex-row gap-2 justify-between p-2 border hover:shadow-[0px_6px_9px_0px_#00000024] duration-300 rounded-md">
+              <div className="flex flex-col gap-1">
+                {i.productId.map((item, index) => (
+                  <OrderItem
+                    name={item.name}
+                    img={item.mainImage}
+                    _id={item._id}
+                    price={i.products[index].sellingPrice}
+                    quantity={i.products[index].quantity}
+                  />
+                ))}
+              </div>
+              <button
+                className="text-start"
+                onClick={() => handleReciept(i._id)}
+                disabled={loading}
+              >
+                Reciept
+              </button>
             </div>
           ))}
         </div>

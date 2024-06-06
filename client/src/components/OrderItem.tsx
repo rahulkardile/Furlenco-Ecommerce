@@ -23,7 +23,6 @@ const OrderItem = ( OrderData: orderProduct) => {
           <Link to={"/"} className="text-blue-500">
             Rate & Review Product
           </Link>
-          <button className="text-start">Reciept</button>
         </div>
       </section>
     </div>

@@ -2,9 +2,9 @@ import express, { Router } from "express";
 import Order from '../models/Order.js';
 import verifyUser from "../utils/VerifyUser.js";
 import Razorpay from "razorpay"
-import crypto from "crypto"
+import fs from "fs"
 import ErrorHandler from "../utils/ErrorHandler.js";
-import { get } from "mongoose";
+import easyinvoice from "easyinvoice";
 
 const routes = express.Router();
 
@@ -110,19 +110,73 @@ routes.get("/myorder", verifyUser, async (req, res, next) => {
     }
 })
 
+routes.get("/invoice/:id", verifyUser, async (req, res, next) => {
+    try {
+
+        const id = req.params.id;
+        const Data = await Order.findById(id);
+
+        let product = [];
+
+        Data.products.map(i => {
+            product.push({
+                "description": i.name,
+                "quantity": i.quantity,
+                "price": i.sellingPrice,
+            })
+        })
+
+        var data = {
+            "currency": "INR",
+            "taxNotation": "vat",
+            "marginTop": "25",
+            "marginRight": "25",
+            "marginLeft": "25",
+            "marginBottom": "25",
+            "logo": "https://assets.furlenco.com/s3-furlenco-images/grogu/Furlenco2.0_LOGO-EMBLEM-LOW-25.png",
+            "sender": {
+                "company": "FURLENCO",
+                "address": "Maharashtra, Pune, Kothrud",
+                "city": "Pune",
+                "country": "India"
+            },
+            "client": {
+                "company": Data.user.name,
+                "address": Data.address.addressWild,
+                "city": Data.address.city,
+                "country": Data.address.state
+            },
+            "invoiceNumber": "2020.0011",
+            "invoiceDate": new Date().toJSON().slice(0, 10),
+            "products": product,
+            "bottomNotice": "Thank you For Buying Products From Our Site!"
+        }
+
+        await easyinvoice.createInvoice(data, async function (result) {
+            fs.writeFileSync("invoice.pdf", result.pdf, "base64")
+            console.log("Created!");
+        });
+
+        res.status(200).json({
+            success: true,
+            message: "Invoice Has been Created!"
+        })
+
+    } catch (error) {
+        next(error);
+    }
+})
+
 routes.get("/allorders", verifyUser, async (req, res, next) => {
     try {
 
         const { _id, name, email } = req.user;
-
         const user = {
             id: _id,
             name,
             email
         }
         const getData = await Order.find();
-
-        console.log(user);
         res.status(200).json(getData);
 
     } catch (error) {
