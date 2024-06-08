@@ -3,15 +3,25 @@ import OrderItem from "../components/OrderItem";
 import { useEffect, useState } from "react";
 import { order } from "../typeScript/Order";
 import toast from "react-hot-toast";
+import axios from "axios";
+import fileDownload from "js-file-download";
 
 const Order = () => {
   const [Orders, setOrders] = useState<order[]>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const data = async () => {
-    const res = await fetch("/api/order/myorder");
-    const GotRes = await res.json();
-    setOrders(GotRes);
+    const res = await fetch("/api/order/myorder", {
+      method: "GET",
+    });
+
+    const { success, data } = await res.json();
+
+    if (success === false) {
+      console.error(res);
+    } else {
+      setOrders(data);
+    }
   };
 
   let ready = false;
@@ -26,15 +36,12 @@ const Order = () => {
   const handleReciept = async (id: string) => {
     setLoading(true);
     toast.success("We Are working on invoice");
-    const getData = await fetch(`/api/order/invoice/${id}`);
-    const { success, message } = await getData.json();
-    if (success) {
-      setLoading(false);
-      toast.success(message);
-    } else {
-      setLoading(false);
-      toast.error("Got Problem During Invoice Creation!");
-    }
+    const getData = await axios.get(`/api/order/generate-invoice/${id}`, {
+      responseType: "blob",
+    });
+
+    fileDownload(getData.data, "invoice.pdf");
+    setLoading(false);
   };
 
   return (
@@ -42,6 +49,7 @@ const Order = () => {
       <h2 id="recline" className="m-auto my-7 text-2xl text-center">
         My Orders
       </h2>
+      <a href="" download="" hidden></a>
       <section className="w-[85%] m-auto flex flex-row gap-10 ">
         <div className="w-1/3 flex flex-col gap-5">
           <div className="flex flex-row gap-1 uppercase items-center text-gray-700 text-sm">
@@ -119,11 +127,11 @@ const Order = () => {
                 ))}
               </div>
               <button
-                className="text-start"
+                className="text-xs p-3 text-center hover:underline"
                 onClick={() => handleReciept(i._id)}
                 disabled={loading}
               >
-                Reciept
+                Download Invoice
               </button>
             </div>
           ))}

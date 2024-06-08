@@ -5,6 +5,9 @@ import Razorpay from "razorpay"
 import fs from "fs"
 import ErrorHandler from "../utils/ErrorHandler.js";
 import easyinvoice from "easyinvoice";
+import puppeteer from "puppeteer";
+import path from 'path';
+const __dirname = path.resolve();
 
 const routes = express.Router();
 
@@ -95,15 +98,12 @@ routes.get("/myorder", verifyUser, async (req, res, next) => {
 
         if (!name) return next(ErrorHandler(401, "User Not Signed In!"))
 
-        const user = {
-            id: _id,
-            name,
-            email
-        }
-
         const getData = await Order.find({ UserId: _id }).select(["products", "amount", "discount", "address", "_id", "UserId"]).populate({ path: "productId", model: "Product", select: ['name', 'price', 'mainImage', '_id'] })
 
-        res.status(200).json(getData);
+        res.status(200).json({
+            success: true,
+            data: getData
+        });
 
     } catch (error) {
         next(error);
@@ -118,7 +118,7 @@ routes.get("/invoice/:id", verifyUser, async (req, res, next) => {
 
         let product = [];
 
-        Data.products.map(i => {
+        await Data.products.map(i => {
             product.push({
                 "description": i.name,
                 "quantity": i.quantity,
@@ -152,15 +152,66 @@ routes.get("/invoice/:id", verifyUser, async (req, res, next) => {
             "bottomNotice": "Thank you For Buying Products From Our Site!"
         }
 
-        await easyinvoice.createInvoice(data, async function (result) {
-            fs.writeFileSync("invoice.pdf", result.pdf, "base64")
-            console.log("Created!");
+        // await easyinvoice.createInvoice(data, async function (result) {
+        //     fs.writeFileSync("invoice.pdf", result.pdf, "base64")
+        //     console.log("Created!");
+        // });
+
+        const fileName = "invoice.pdf"
+
+        if (!fs.existsSync(fileName)) {
+            return res.status(404).json({
+                "statusCode": 404,
+                "message": "File not found"
+            })
+        }
+
+        res.status(200).download('./invoice.pdf');
+
+    } catch (error) {
+        next(error);
+    }
+})
+
+routes.get("/generate-invoice/:id", verifyUser, async (req, res, next) => {
+    try {
+
+        const { id } = req.params;
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+
+        // dynamic Generation
+        //${req.protocol}://${req.get('host')} 
+        await page.goto(`http://localhost:5000/views/invoice/${id}`, {
+            waitUntil: "networkidle0"
         });
 
-        res.status(200).json({
-            success: true,
-            message: "Invoice Has been Created!"
+        await page.setViewport({
+            width: 1680,
+            height: 1050
         })
+
+        const today = new Date();
+        console.log("before path");
+
+        // genarating the pdf
+        const pdf = await page.pdf({
+            path: 'result.pdf',
+            margin: { top: '100px', right: '50px', bottom: '100px', left: '50px' },
+            printBackground: true,
+            format: 'A4',
+        });
+
+        console.log("next to from path");
+
+        await browser.close();
+
+        res.set({
+            "Content-Type": "application/pdf",
+            "Content-Length": pdf.length,
+        })
+
+        res.download("result.pdf");
 
     } catch (error) {
         next(error);

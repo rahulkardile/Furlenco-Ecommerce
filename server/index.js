@@ -3,17 +3,22 @@ import mongoose from "mongoose"
 import dotenv from "dotenv"
 import cookieParser from "cookie-parser"
 import easyinvoice from "easyinvoice"
-import fs from "fs"
-import PDF from "pdfkit"
-// import 
+import path from "path"
 
 import User from "./routes/User.js"
 import Product from "./routes/Product.js"
-import Order from "./routes/Order.js"
+import OrderRoute from "./routes/Order.js"
+import Order from "./models/Order.js"
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+
+// seting ejs engine
+app.set("view engine", "ejs");
+
+// setting where our ejs are
+app.set("views", path.resolve("./views"));
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
@@ -29,7 +34,7 @@ try {
 app.get("/", (req, res) => {
     res.status(200).json({
         statusCode: 200,
-        message: "Server is Working!" 
+        message: "Server is Working!"
     })
 })
 
@@ -37,7 +42,31 @@ app.use("/api/uploads", express.static("uploads"));
 
 app.use("/api/user", User)
 app.use("/api/product", Product)
-app.use("/api/order", Order);
+app.use("/api/order", OrderRoute);
+
+app.get("/views/invoice/:id", async (req, res, next) => {
+    try {
+
+        const { id } = req.params;
+        const data = await Order.findById(id);
+
+        const date = new Date();
+        let currentDate = date.toDateString()
+
+        return res.render("Invoice", {
+            name: data.address.name,
+            mobile: data.address.mobile,
+            town: data.address.town,
+            address: data.address.addressWild,
+            products: data.products,
+            total: data.amount,
+            date: currentDate
+        })
+
+    } catch (error) {
+        next(error);
+    }
+})
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 400;

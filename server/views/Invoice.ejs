@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <style>
+        body {
+            margin: 0.3rem;
+            padding: 3rem;
+        }
+
+        #UserAddress{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #logo {
+            color: rgb(10, 27, 111);
+            text-align: center;
+        }
+
+        .add {
+            margin-top: -10px;
+            display: flex;
+            gap: 3px;
+            flex-direction: column;
+        }
+
+        h4,
+        h3,
+        h2,
+        p {
+            margin-block-start: 0;
+            margin-block-end: 0;
+        }
+
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 5rem;
+        }
+
+        td,
+        th {
+            border-bottom: 1px solid black;
+            text-align: left;
+            padding: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="logo">Invoice</h1>
+    <div style="margin-left: 72%;" class="add">
+        <h2>Furlenco Inc.</h2>
+        <p>Vanaz Station, Kothrud 414203</p>
+        <p>Pune, Maharashtra, India</p>
+    </div>
+
+    <div id="UserAddress" style="margin-top: 2rem;" class="user">
+        <div class="">
+            <h4 style="">BILL TO :</h4>
+            <p>
+                <%= name %>
+            </p>
+            <p>
+                <%= mobile %>
+            </p>
+            <p>
+                <%= town %>
+            </p>
+            <p>
+                <%= address %>
+            </p>
+        </div>
+        <div style="margin-right: 4rem;" class="">
+            <p>Invoice No: 12421</p>
+            <p><%= date %></p>
+        </div>
+       
+    </div>
+
+    <table>
+        <tr style="border-top: 1px solid black;">
+            <th style="padding: 1rem;">Product Name</th>
+            <th style="padding: 1rem;">QTY</th>
+            <th style="padding: 1rem;">Price</th>
+            <th style="padding: 1rem;">Discount</th>
+            <th style="padding: 1rem;">Amount</th>
+        </tr>
+        <% products.forEach(item=> { %>
+            <tr>
+                <td style="padding: 1rem;">
+                    <%=item.name%>
+                </td>
+                <td style="padding: 1rem;">
+                    <%=item.quantity%>
+                </td>
+                <td style="padding: 1rem;">
+                    <%=item.price%>
+                </td>
+                <td style="padding: 1rem;">
+                    <%=item.discount + 500%>
+                </td>
+                <td style="padding: 1rem;">
+                    <%=item.sellingPrice%>
+                </td>
+            </tr>
+            <% }) %>
+
+                <tr>
+                    <td style="padding: 1rem; border-bottom: none;">
+                    </td>
+                    <td style="padding: 1rem; border-bottom: none;">
+                    </td>
+                    <td style="padding: 1rem; border-bottom: none;">
+                    </td>
+                    <td style="padding: 1rem; border-bottom: none;">
+                        <h4>Subtotal</h4>
+                    </td>
+                    <td style="padding: 1rem; border-bottom: none;">
+                        <%=total %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding: 1rem; border-bottom: none;">
+                    </td>
+                    <td style="padding: 1rem; border-bottom: none;">
+                    </td>
+                    <td style="padding: 1rem; border-bottom: none;">
+                    </td>
+                    <td style="padding: 1rem; border-bottom: 1px solid black;">
+                        <h4>Tax(0%)</h4>
+                    </td>
+                    <td style="padding: 1rem; border-bottom: 1px solid black;">
+                        0
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding: 1rem; border-bottom: none;">
+                    </td>
+                    <td style="padding: 1rem; border-bottom: none;">
+                    </td>
+                    <td style="padding: 1rem; border-bottom: none;">
+                    </td>
+                    <td style="padding: 1rem;">
+                        <h3>Total</h3>
+                    </td>
+                    <td style="padding: 1rem;">
+                        <%= total %>
+                    </td>
+                </tr>
+
+    </table>
+
+    <div class="" style="margin-top: 5rem; margin-left: 3rem;">
+        <h1>Thank You!</h1>
+    </div>
+
+</body>
+
+</html>
