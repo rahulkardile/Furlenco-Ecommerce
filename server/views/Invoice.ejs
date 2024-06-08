@@ -11,7 +11,7 @@
             padding: 3rem;
         }
 
-        #UserAddress{
+        #UserAddress {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -51,11 +51,23 @@
             text-align: left;
             padding: 8px;
         }
+
+        .Invoice {
+            width: 80%;
+            margin: auto;
+            margin-bottom: 40px;
+            background-color: antiquewhite;
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
-    <h1 id="logo">Invoice</h1>
+
+    <div class="Invoice">
+        <h1 id="logo">Invoice</h1>
+    </div>
+
     <div style="margin-left: 72%;" class="add">
         <h2>Furlenco Inc.</h2>
         <p>Vanaz Station, Kothrud 414203</p>
@@ -80,9 +92,11 @@
         </div>
         <div style="margin-right: 4rem;" class="">
             <p>Invoice No: 12421</p>
-            <p><%= date %></p>
+            <p>
+                <%= date %>
+            </p>
         </div>
-       
+
     </div>
 
     <table>
@@ -160,8 +174,8 @@
 
     </table>
 
-    <div class="" style="margin-top: 5rem; margin-left: 3rem;">
-        <h1>Thank You!</h1>
+    <div class="" style="margin: auto; width: 100%; padding-top: 5rem; text-align: center;">
+        <h3>It was a pleasure serving you. Thank you for your purchase.</h3>
     </div>
 
 </body>

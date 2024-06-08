@@ -192,7 +192,6 @@ routes.get("/generate-invoice/:id", verifyUser, async (req, res, next) => {
         })
 
         const today = new Date();
-        console.log("before path");
 
         // genarating the pdf
         const pdf = await page.pdf({
@@ -200,8 +199,6 @@ routes.get("/generate-invoice/:id", verifyUser, async (req, res, next) => {
             printBackground: true,
             format: 'A4',
         });
-
-        console.log("next to from path");
 
         await browser.close();
 
