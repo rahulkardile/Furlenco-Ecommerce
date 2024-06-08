@@ -1,6 +1,7 @@
 import express from "express"
 import Product from "../models/Product.js";
 import verifyUser from "../utils/VerifyUser.js";
+import fs from "fs";
 import { upload } from "../utils/Multer.js";
 import ErrorHandler from "../utils/ErrorHandler.js";
 
@@ -70,18 +71,32 @@ router.get("/get/:id", async (req, res, next) => {
 router.delete("/delete/:id", verifyUser, async (req, res, next) => {
     try {
 
+        const { _id, role } = req.user;
         const { id } = req.params;
-        const deleteProject = await Product.findById(id);
+        const deleteProduct = await Product.findById(id);
 
-        if (!deleteProject) return ErrorHandler(404, "Product Not Found!");
+        if (!deleteProduct) return ErrorHandler(404, "Product Not Found!");
 
-        // const product = await Product.findByIdAndDelete(id);
+        if (role === "admin" || deleteProduct.owner.id === _id) {
 
-        res.status(200).json({
-            success: true,
-            message: "",
-            // data: product
-        })
+            fs.rm(deleteProduct.mainImage, () => {
+                console.log("Image has been deleted!");
+            })
+
+            await Product.findByIdAndDelete(id);
+
+            res.status(200).json({
+                success: true,
+                message: "Product Has Been deleted!",
+            })
+
+        } else {
+            return res.status(200).json({
+                success: false,
+                message: "Bad Request to delete!"
+            })
+        }
+
 
     } catch (error) {
         console.log(error);
