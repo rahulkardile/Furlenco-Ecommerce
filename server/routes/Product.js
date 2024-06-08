@@ -2,6 +2,7 @@ import express from "express"
 import Product from "../models/Product.js";
 import verifyUser from "../utils/VerifyUser.js";
 import { upload } from "../utils/Multer.js";
+import ErrorHandler from "../utils/ErrorHandler.js";
 
 const router = express.Router();
 
@@ -62,6 +63,28 @@ router.get("/get/:id", async (req, res, next) => {
         })
 
     } catch (error) {
+        next(error);
+    }
+})
+
+router.delete("/delete/:id", verifyUser, async (req, res, next) => {
+    try {
+
+        const { id } = req.params;
+        const deleteProject = await Product.findById(id);
+
+        if (!deleteProject) return ErrorHandler(404, "Product Not Found!");
+
+        // const product = await Product.findByIdAndDelete(id);
+
+        res.status(200).json({
+            success: true,
+            message: "",
+            // data: product
+        })
+
+    } catch (error) {
+        console.log(error);
         next(error);
     }
 })
