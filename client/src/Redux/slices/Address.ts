@@ -2,10 +2,6 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { InfoInterface } from "../../typeScript/FromData";
 import toast from "react-hot-toast";
 
-interface Remove {
-    id: string
-}
-
 type InfoType = {
   Address: InfoInterface | null;
 };

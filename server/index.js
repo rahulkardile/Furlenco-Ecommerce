@@ -19,6 +19,7 @@ app.set("view engine", "ejs");
 
 // setting where our ejs are
 app.set("views", path.resolve("./views"));
+const __dirname = path.resolve();
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
@@ -31,7 +32,7 @@ try {
     console.log('Database is error ' + error);
 }
 
-app.get("/", (req, res) => {
+app.get("/check", (req, res) => {
     res.status(200).json({
         statusCode: 200,
         message: "Server is Working!"
@@ -43,6 +44,12 @@ app.use("/api/uploads", express.static("uploads"));
 app.use("/api/user", User)
 app.use("/api/product", Product)
 app.use("/api/order", OrderRoute);
+
+app.use(express.static(path.join(__dirname, '/client/dist')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+})
 
 app.get("/views/invoice/:id", async (req, res, next) => {
     try {

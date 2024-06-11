@@ -7,7 +7,6 @@ import toast from "react-hot-toast";
 import Icon from "../assets/app_icon.jpeg";
 import { useState } from "react";
 import { removeAll } from "../Redux/slices/CartReducer";
-import NotFound from "./NotFound";
 import EmptyCart from "../components/EmptyCart";
 
 const Summery = () => {

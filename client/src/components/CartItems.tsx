@@ -69,7 +69,7 @@ const CartItems = (data: ProductFetch) => {
             <HiMiniMinus onClick={() => handleQuantity("minus")} />
           </button>
           <span className="bg-[#efbe54] absolute p-[10px] rounded-md px-1 w-20 text-center -bottom-3 text-white font-semibold text-xs/[2px]">{`Only ${
-            data.stock - data.quantity
+            data.stock - (data.quantity === undefined ? 1 : data.quantity)
           } left`}</span>
         </div>
       </section>
